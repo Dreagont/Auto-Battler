@@ -28,7 +28,6 @@ public class Character : MonoBehaviour
 
     void Attack()
     {
-        // Remove null enemies from the list
         enemies.RemoveAll(enemy => enemy == null);
 
         if (currentTarget == null)
@@ -39,11 +38,11 @@ public class Character : MonoBehaviour
         if (currentTarget != null)
         {
             Debug.Log("Character attacks enemy: " + currentTarget.name);
-            currentTarget.TakeDamage(10); // Adjust damage as needed
+            currentTarget.TakeDamage(10); 
         }
         else
         {
-            Debug.LogWarning("No enemies found to attack.");
+            //Debug.LogWarning("No enemies found to attack.");
         }
     }
 
@@ -58,7 +57,7 @@ public class Character : MonoBehaviour
         else
         {
             currentTarget = null;
-            Debug.LogWarning("No enemies available to select as new target.");
+            //Debug.LogWarning("No enemies available to select as new target.");
         }
     }
 
@@ -69,7 +68,6 @@ public class Character : MonoBehaviour
         if (health <= 0f)
         {
             Debug.LogError("Character has died.");
-            // Handle character death
         }
     }
 

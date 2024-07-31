@@ -31,7 +31,7 @@ public class Enemy : MonoBehaviour
         if (character != null)
         {
             Debug.Log(name + " attacks character.");
-            character.TakeDamage(5f); // Adjust damage as needed
+            character.TakeDamage(5f); 
         }
         else
         {
@@ -47,12 +47,10 @@ public class Enemy : MonoBehaviour
         if (health <= 0f)
         {
             Debug.LogError(name + " has died.");
-            // Notify character of this enemy's destruction
             if (character != null)
             {
                 character.EnemyDestroyed(this);
             }
-            // Handle enemy death
             Destroy(gameObject);
         }
     }

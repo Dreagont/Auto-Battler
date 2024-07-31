@@ -15,5 +15,5 @@ MonoBehaviour:
   ID: 1
   displayName: Bruh
   description: sadadas
-  icon: {fileID: 133222978, guid: 6de9799fe5b16ac409c214e94bca161a, type: 3}
+  icon: {fileID: -1429853927, guid: 9470b17ec078762449d7fbcec5647f51, type: 3}
   MaxStackSize: 5
