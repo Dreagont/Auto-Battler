@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c7ca7bc84f6875647b44506e56f5535e, type: 3}
-  m_Name: New Inventory Item Data
+  m_Name: Carrot
   m_EditorClassIdentifier: 
   ID: 1
-  displayName: Bruh
-  description: sadadas
+  displayName: Carrot
+  description: Carrot
   icon: {fileID: -1429853927, guid: 9470b17ec078762449d7fbcec5647f51, type: 3}
   MaxStackSize: 5

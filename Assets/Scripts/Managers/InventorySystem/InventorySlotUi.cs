@@ -15,6 +15,7 @@ public class InventorySlotUi : MonoBehaviour
     private Button button;
 
     public InventoryDisplay ParentDisplay { get; private set; }
+
     private void Awake()
     {
         ClearSlot();
@@ -38,20 +39,12 @@ public class InventorySlotUi : MonoBehaviour
             itemSprite.sprite = slot.ItemData.icon;
             itemSprite.color = Color.white;
 
-            if (slot.StackSize > 1)
-            {
-                itemCount.text = slot.StackSize.ToString();
-            }
-            else
-            {
-                itemCount.text = "";
-            }
+            itemCount.text = slot.StackSize > 1 ? slot.StackSize.ToString() : "";
         }
         else
         {
             ClearSlot();
         }
-
     }
 
     public void UpdateInventorySlot()
@@ -64,6 +57,7 @@ public class InventorySlotUi : MonoBehaviour
 
     public void ClearSlot()
     {
+        assignedInventorySlot.ClearSlot();
         itemSprite.sprite = null;
         itemSprite.color = Color.clear;
         itemCount.text = "";

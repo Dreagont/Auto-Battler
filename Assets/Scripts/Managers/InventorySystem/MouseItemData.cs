@@ -11,8 +11,11 @@ public class MouseItemData : MonoBehaviour
     public TextMeshProUGUI ItemCount;
     public InventorySlots AsssignedInventorySlot;
 
+    public Canvas parentCanvas;
+
     private void Awake()
     {
+        parentCanvas = GetComponentInParent<Canvas>();
         ClearSlot();
     }
 
@@ -28,7 +31,10 @@ public class MouseItemData : MonoBehaviour
     {
         if (AsssignedInventorySlot != null && AsssignedInventorySlot.ItemData != null)
         {
-            transform.position = Mouse.current.position.ReadValue();
+            Vector3 mousePosition = Mouse.current.position.ReadValue();
+            Vector2 canvasPosition;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(parentCanvas.transform as RectTransform, mousePosition, parentCanvas.worldCamera, out canvasPosition);
+            transform.position = parentCanvas.transform.TransformPoint(canvasPosition);
 
             if (Mouse.current.leftButton.wasPressedThisFrame && !IsPointerOverUIObject())
             {

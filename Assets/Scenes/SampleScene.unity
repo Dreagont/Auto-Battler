@@ -265,7 +265,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   InventoryHolder: {fileID: 1528748725}
-  itemData: {fileID: 11400000, guid: cf84490f2d7438a4890424d59b8391fa, type: 2}
+  itemData1: {fileID: 11400000, guid: cf84490f2d7438a4890424d59b8391fa, type: 2}
+  itemData2: {fileID: 11400000, guid: be2a5343cd277d44cac187d1cf59e363, type: 2}
 --- !u!4 &185663755
 Transform:
   m_ObjectHideFlags: 0
@@ -1026,6 +1027,7 @@ MonoBehaviour:
   AsssignedInventorySlot:
     itemData: {fileID: 0}
     stackSize: 0
+  parentCanvas: {fileID: 908769650}
 --- !u!1001 &1013997292
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2370,7 +2372,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2452360731241745265, guid: 9ce124a1de190dc4e99b3a85f76b6248, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7304544796267711038, guid: 9ce124a1de190dc4e99b3a85f76b6248, type: 3}
       propertyPath: m_LocalPosition.x
