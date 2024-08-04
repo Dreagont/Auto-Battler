@@ -13,6 +13,10 @@ public class MouseItemData : MonoBehaviour
 
     public Canvas parentCanvas;
 
+    private void Start()
+    {
+
+    }
     private void Awake()
     {
         parentCanvas = GetComponentInParent<Canvas>();

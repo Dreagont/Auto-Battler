@@ -60,4 +60,9 @@ public class InventorySystem
         freeSlot = inventorySlots.FirstOrDefault(i => i.ItemData == null);
         return freeSlot != null;
     }
+
+    public void AddSlot(InventorySlots newSlot)
+    {
+        InventorySlots.Add(newSlot);
+    }
 }
