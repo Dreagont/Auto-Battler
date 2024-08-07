@@ -1,22 +1,67 @@
+using TMPro;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public int maxHealth = 50;
-    public int health = 50;
+    public float maxHealth;
+    public float health;
     public float attackSpeed = 1f;
+    public float armor;
+    public float damage;
     private float attackCooldown = 0f;
     private Character character;
     public EnemyHealthBar healthBar;
+    public GameObject damageText;
+    public TMP_Text popupText;
+    public float increase;
+    public Canvas canvas;
+    private EnemySpawner spawner;
+    public EnemyTypeData enemyTypeData;
+    bool isFirstHit = true;
 
-    void Start()
+    protected virtual void Start()
     {
+        ApplyEnemyType();
+
         healthBar.UpdateBar(health, maxHealth);
         character = FindObjectOfType<Character>();
-        Debug.Log(name + " started with health: " + health + " and attack speed: " + attackSpeed);
+        spawner = FindObjectOfType<EnemySpawner>();
+
+
+        if (canvas == null)
+        {
+            GameObject canvasObject = GameObject.FindWithTag("Canvas");
+            if (canvasObject != null)
+            {
+                canvas = canvasObject.GetComponent<Canvas>();
+            }
+            else
+            {
+                Debug.LogError("No canvas found with the 'DamageCanvas' tag.");
+            }
+        }
     }
 
-    void Update()
+    void ApplyEnemyType()
+    {
+
+        if (enemyTypeData != null)
+        {
+            int trueLevel = enemyTypeData.level - 1;
+            float levelStat = (float)trueLevel * 10;
+            attackSpeed = enemyTypeData.attackSpeed;
+            armor = enemyTypeData.armor + enemyTypeData.armor * levelStat/100;
+            maxHealth = enemyTypeData.maxHealth + enemyTypeData.maxHealth * levelStat / 100;
+            damage = enemyTypeData.damage + enemyTypeData.damage * levelStat / 100;
+            health = maxHealth;
+        }
+        else
+        {
+            Debug.LogError("EnemyTypeData is not assigned.");
+        }
+    }
+
+    protected virtual void Update()
     {
         attackCooldown -= Time.deltaTime;
         if (attackCooldown <= 0f)
@@ -26,12 +71,18 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    void Attack()
+    protected virtual void Attack()
     {
         if (character != null)
         {
             Debug.Log(name + " attacks character.");
-            character.TakeDamage(5f); 
+            if (damage < 1f)
+            {
+                character.TakeDamage(1f);
+            } else
+            {
+                character.TakeDamage(damage);
+            }
         }
         else
         {
@@ -39,19 +90,40 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void TakeDamage(int amount)
+    public virtual void TakeDamage(float damage)
     {
-        health -= amount;
-        healthBar.UpdateBar(health, maxHealth);
-        Debug.Log(name + " takes damage: " + amount + ", remaining health: " + health);
-        if (health <= 0f)
+        if (!isFirstHit)
         {
-            Debug.LogError(name + " has died.");
-            if (character != null)
+            float amount = Mathf.Max(0, damage - (int)armor);
+            if (amount < 1)
             {
-                character.EnemyDestroyed(this);
+                amount = 1;
             }
-            Destroy(gameObject);
+            health -= amount;
+            healthBar.UpdateBar(health, maxHealth);
+            RectTransform textTramform = Instantiate(damageText).GetComponent<RectTransform>();
+            textTramform.transform.position = Camera.main.WorldToScreenPoint(gameObject.transform.position) + new Vector3(0, increase, 0);
+
+            popupText.text = amount.ToString();
+            textTramform.SetParent(canvas.transform);
+            if (health <= 0f)
+            {
+                Debug.LogError(name + " has died.");
+                if (character != null)
+                {
+                    character.EnemyDestroyed(this);
+                }
+                if (spawner != null)
+                {
+                    spawner.OnEnemyKilled();
+                }
+                Destroy(gameObject);
+            }
+        } else
+        {
+            isFirstHit = false;
+            return;
         }
+        
     }
 }

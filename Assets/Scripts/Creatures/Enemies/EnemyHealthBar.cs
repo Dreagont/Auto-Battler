@@ -18,7 +18,7 @@ public class EnemyHealthBar : MonoBehaviour
         
     }
 
-    public void UpdateBar(int currentHealth, int maxHealth)
+    public void UpdateBar(float currentHealth, float maxHealth)
     {
         fillBar.fillAmount = (float)currentHealth / (float)maxHealth;
     }

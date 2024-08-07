@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6179470490205692042}
   - component: {fileID: 1178657155673300175}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: aaa
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31,8 +31,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 5716609983406735420}
-  - {fileID: 1608389041391152934}
+  - {fileID: 2876313369063607853}
   m_Father: {fileID: 2629459016160760816}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -115,7 +114,7 @@ GameObject:
   - component: {fileID: 7300734626082088750}
   - component: {fileID: 3561853764290999753}
   m_Layer: 0
-  m_Name: Zombie01
+  m_Name: Zombie
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -201,10 +200,53 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c71b81efd3babb94c896ebea75e77de4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 50
-  health: 50
+  maxHealth: 100
+  health: 0
   attackSpeed: 1
+  armor: 0
   healthBar: {fileID: 7806442989304462873}
+  damageText: {fileID: 6382206904851368114, guid: e28a7c1bd319d1341b0c202c93b0989c, type: 3}
+  popupText: {fileID: 7899523419395991742, guid: e28a7c1bd319d1341b0c202c93b0989c, type: 3}
+  increase: 60
+  canvas: {fileID: 0}
+  enemyTypeData: {fileID: 11400000, guid: 2562641bc50943343bfd428611d53f84, type: 2}
+--- !u!1 &4296703466771276407
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2876313369063607853}
+  m_Layer: 5
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2876313369063607853
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4296703466771276407}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 5716609983406735420}
+  - {fileID: 1608389041391152934}
+  m_Father: {fileID: 5950241907359275328}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: -1.13}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &7094540151253729543
 GameObject:
   m_ObjectHideFlags: 0
@@ -230,16 +272,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7094540151253729543}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5950241907359275328}
+  m_Father: {fileID: 2876313369063607853}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0, y: 0.513}
+  m_AnchoredPosition: {x: 0, y: 0.513}
   m_SizeDelta: {x: 0.6473, y: 0.1107}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &325666707246974987
@@ -351,16 +393,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7631206234853911653}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5950241907359275328}
+  m_Father: {fileID: 2876313369063607853}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.000000078231, y: 0.505}
+  m_AnchoredPosition: {x: 0, y: 0.505}
   m_SizeDelta: {x: 0.7275, y: 0.1907}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2788134400633971776
