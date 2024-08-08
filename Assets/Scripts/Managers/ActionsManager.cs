@@ -27,4 +27,9 @@ public class ActionsManager : MonoBehaviour
             Debug.Log("Picked up item: " + itemData2.name);
         }
     }
+    public void PickupItem(InventoryItemData itemData)
+    {
+        InventoryHolder.AddToInventory(itemData, 1);
+        Debug.Log("Picked up item: " + itemData.name);
+    }
 }

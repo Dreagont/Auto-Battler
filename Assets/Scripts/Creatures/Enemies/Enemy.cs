@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -18,7 +19,9 @@ public class Enemy : MonoBehaviour
     private EnemySpawner spawner;
     public EnemyTypeData enemyTypeData;
     bool isFirstHit = true;
-
+    public List<InventoryItemData> dropItems; 
+    public int dropAmount = 1; 
+    private ActionsManager actionsManager;
     protected virtual void Start()
     {
         ApplyEnemyType();
@@ -26,7 +29,7 @@ public class Enemy : MonoBehaviour
         healthBar.UpdateBar(health, maxHealth);
         character = FindObjectOfType<Character>();
         spawner = FindObjectOfType<EnemySpawner>();
-
+        actionsManager = FindObjectOfType<ActionsManager>();
 
         if (canvas == null)
         {
@@ -75,7 +78,6 @@ public class Enemy : MonoBehaviour
     {
         if (character != null)
         {
-            Debug.Log(name + " attacks character.");
             if (damage < 1f)
             {
                 character.TakeDamage(1f);
@@ -108,6 +110,7 @@ public class Enemy : MonoBehaviour
             textTramform.SetParent(canvas.transform);
             if (health <= 0f)
             {
+                DropItems();
                 Debug.LogError(name + " has died.");
                 if (character != null)
                 {
@@ -117,6 +120,8 @@ public class Enemy : MonoBehaviour
                 {
                     spawner.OnEnemyKilled();
                 }
+                
+
                 Destroy(gameObject);
             }
         } else
@@ -125,5 +130,23 @@ public class Enemy : MonoBehaviour
             return;
         }
         
+    }
+    void DropItems()
+    {
+        Debug.Log("DropItems called.");
+
+        if (dropItems != null && actionsManager != null)
+        {
+            Debug.Log("Dropping items.");
+            for (int i = 0; i < dropAmount; i++)
+            {
+                int randomIndex = Random.Range(0, dropItems.Count);
+                actionsManager.PickupItem(dropItems[randomIndex]);
+            }
+        }
+        else
+        {
+            Debug.Log("Either dropItems or actionsManager is null.");
+        }
     }
 }

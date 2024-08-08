@@ -11,7 +11,7 @@ public class ChestInventory : MonoBehaviour
     public InventorySystem chestInventory;
     public Image chestImage;
     public Button addSlotButton;
-    private void Awake()
+    private void Start()
     {
         chestInventory = new InventorySystem(48);
 
@@ -53,7 +53,6 @@ public class ChestInventory : MonoBehaviour
             InventoryUI.gameObject.SetActive(false);
         } else {
             InventoryUI.gameObject.SetActive(true);
-            inventoryPanel.RefreshDynamicInventory(chestInventory);
         }
     }
 
