@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c7ca7bc84f6875647b44506e56f5535e, type: 3}
-  m_Name: Carrot
+  m_Name: Sword
   m_EditorClassIdentifier: 
-  ID: 1
-  displayName: Carrot
-  description: Carrot
-  icon: {fileID: -1429853927, guid: 9470b17ec078762449d7fbcec5647f51, type: 3}
-  MaxStackSize: 5
-  itemType1: 2
-  itemType2: 3
-  EquipableTag: 0
+  ID: 4
+  displayName: Sword
+  description: Sword
+  icon: {fileID: 107538852, guid: c1ed09e0d7a049c408068a4188fee0c7, type: 3}
+  MaxStackSize: 1
+  itemType1: 1
+  itemType2: 0
+  EquipableTag: 3
   bonusHealth: 0
   bonusArmor: 0
-  bonusDamage: 0
+  bonusDamage: 66
   bonusAttackSpeed: 0
   bonusRegen: 0

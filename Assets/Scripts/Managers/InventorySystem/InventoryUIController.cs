@@ -2,14 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class InventoryUIController : MonoBehaviour
 {
     public DynamicInventoryDisplay inventoryPanel;
+    public GameObject inventoryPanelOuter;
 
+    
     private void Awake()
     {
-        //inventoryPanel.gameObject.SetActive(false);
+        inventoryPanelOuter.gameObject.SetActive(false);
     }
 
     private void OnEnable()
@@ -26,13 +29,32 @@ public class InventoryUIController : MonoBehaviour
     void Update()
     {
 
-        //if (inventoryPanel.gameObject.activeInHierarchy && Keyboard.current.escapeKey.wasPressedThisFrame) inventoryPanel.gameObject.SetActive(false);
+        if (inventoryPanel.gameObject.activeInHierarchy)
+        { 
+            if (Keyboard.current.escapeKey.wasPressedThisFrame || Keyboard.current.xKey.wasPressedThisFrame)
+            {
+                inventoryPanelOuter.gameObject.SetActive(false);
+            }
+        } 
 
+       
+
+    }
+    private void OpenChest()
+    {
+        if (inventoryPanelOuter.gameObject.activeInHierarchy)
+        {
+            inventoryPanelOuter.gameObject.SetActive(false);
+        }
+        else
+        {
+            inventoryPanelOuter.gameObject.SetActive(true);
+        }
     }
 
     void DisplayInventory (InventorySystem inventoryToDisplay)
     {
-        inventoryPanel.gameObject.SetActive(true);
+        inventoryPanelOuter.gameObject.SetActive(true);
         inventoryPanel.RefreshDynamicInventory(inventoryToDisplay);
 
     }

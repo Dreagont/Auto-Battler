@@ -13,9 +13,6 @@ public class ChestInventory : MonoBehaviour
     public Button addSlotButton;
     private void Start()
     {
-        chestInventory = new InventorySystem(48);
-
-        InventoryUI.gameObject.SetActive(false);
 
         addSlotButton.onClick.AddListener(() => AddSlotsToInventory(0));
 
@@ -24,26 +21,11 @@ public class ChestInventory : MonoBehaviour
             chestImage.GetComponent<Button>().onClick.AddListener(OpenChest);
         }
 
-        inventoryPanel.AssignSlot(chestInventory);
     }
 
     private void Update()
     {
-        if (Keyboard.current.iKey.wasPressedThisFrame)
-        {
-            if (InventoryUI.gameObject.activeInHierarchy)
-            {
-                InventoryUI.gameObject.SetActive(false);
-            } else
-            {
-                OpenChest();
-            }
-        }
-
-        if (InventoryUI.gameObject.activeInHierarchy && Keyboard.current.escapeKey.wasPressedThisFrame)
-        {
-            InventoryUI.gameObject.SetActive(false);
-        }
+       
     }
 
     private void OpenChest()

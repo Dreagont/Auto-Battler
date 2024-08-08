@@ -15,6 +15,20 @@ public abstract class InventoryDisplay : MonoBehaviour
 
     protected virtual void UpdateSlot(InventorySlots updatedSlot)
     {
+        Debug.LogWarning("Dynamic change");
+
+        foreach (var slot in slotDictionary)
+        {
+            if (slot.Value == updatedSlot)
+            {
+                slot.Key.UpdateInventorySlot(updatedSlot);
+            }
+        }
+    }
+
+    protected virtual void UpdateSlotStatic(InventorySlots updatedSlot)
+    {
+        Debug.LogWarning("Static change");
         foreach (var slot in slotDictionary)
         {
             if (slot.Value == updatedSlot)
@@ -41,10 +55,15 @@ public abstract class InventoryDisplay : MonoBehaviour
         }
         else if (slot.AssignedInventorySlot.ItemData == null && mouseInventoryItem.AsssignedInventorySlot != null)
         {
-            Debug.Log("Dropping item into empty slot");
-            slot.AssignedInventorySlot.AssignItem(mouseInventoryItem.AsssignedInventorySlot);
-            slot.UpdateInventorySlot();
-            mouseInventoryItem.ClearSlot();
+            if (slot.equipableTag == mouseInventoryItem.AsssignedInventorySlot.ItemData.EquipableTag || slot.equipableTag == EquipableTag.None)
+            {
+                Debug.Log("Dropping item into empty slot");
+                slot.AssignedInventorySlot.AssignItem(mouseInventoryItem.AsssignedInventorySlot);
+                slot.UpdateInventorySlot();
+                mouseInventoryItem.ClearSlot();
+            }
+            
+            
         }
         else if (slot.AssignedInventorySlot.ItemData != null && mouseInventoryItem.AsssignedInventorySlot != null)
         {

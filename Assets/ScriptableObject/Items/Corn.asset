@@ -17,3 +17,11 @@ MonoBehaviour:
   description: Corn
   icon: {fileID: 113395291, guid: 9470b17ec078762449d7fbcec5647f51, type: 3}
   MaxStackSize: 3
+  itemType1: 2
+  itemType2: 3
+  EquipableTag: 0
+  bonusHealth: 0
+  bonusArmor: 0
+  bonusDamage: 0
+  bonusAttackSpeed: 0
+  bonusRegen: 0

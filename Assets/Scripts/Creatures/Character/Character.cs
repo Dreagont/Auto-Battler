@@ -4,11 +4,25 @@ using TMPro;
 
 public class Character : MonoBehaviour
 {
-    public float health = 100f;
+    [SerializeField] private float SumMaxhealth;
+    public float maxhealth = 100f;
+    public float health;
     public float attackSpeed = 1f;
     public float attackDamage = 50;
     public float armor = 5;
+    public float regenAmount = 0.1f;
+
+    private float SumHealth;
+    private float SumAttackSpeed;
+    private float SumAttackDamage;
+    private float SumArmor;
+    private float SumRegenAmount;
+
+    
+
     private float attackCooldown = 0f;
+    private float regenCooldown = 0f;
+
     private List<Enemy> enemies;
     private Enemy currentTarget;
     public GameObject damageText;
@@ -16,21 +30,71 @@ public class Character : MonoBehaviour
     public float increase;
     public Canvas canvas;
     bool isFirstHit = true;
+    public StaticInventoryDisplay GearInventory;
 
     void Start()
     {
         enemies = new List<Enemy>(FindObjectsOfType<Enemy>());
+        health = maxhealth;
         SelectNewTarget();
     }
 
     void Update()
     {
+        UpdatePlayerStast();
         attackCooldown -= Time.deltaTime;
         if (attackCooldown <= 0f)
         {
             Attack();
-            attackCooldown = 1f / attackSpeed;
+            attackCooldown = 1f / SumAttackSpeed;
         }
+        if (health < SumMaxhealth)
+        {
+            regenCooldown -= Time.deltaTime;
+            if (regenCooldown <= 0f)
+            {
+                RegenHealth();
+                regenCooldown = 1f;
+            }
+        }
+        if (health > SumMaxhealth)
+        {
+            health = SumMaxhealth;
+        }
+    }
+
+
+
+    public void UpdatePlayerStast()
+    {
+        SumMaxhealth = maxhealth + GearInventory.GearMaxhealth;
+        SumAttackDamage = attackDamage + GearInventory.GearAttackDamage;
+        SumAttackSpeed = attackSpeed + GearInventory.GearAttackSpeed;
+        SumArmor = armor + GearInventory.GearArmor;
+        SumRegenAmount = regenAmount + GearInventory.GearRegenAmount;
+    }
+
+    public void RegenHealth()
+    {
+        health += SumRegenAmount;    
+    }
+
+    public void EquipGear(InventoryItemData gearToEquip)
+    {
+        health += gearToEquip.bonusHealth;
+        attackDamage += gearToEquip.bonusDamage;
+        armor += gearToEquip.bonusArmor;
+        attackSpeed += gearToEquip.bonusAttackSpeed;
+        regenAmount += gearToEquip.bonusRegen;
+    }
+
+    public void UnEquipGear(InventoryItemData gearToEquip)
+    {
+        health -= gearToEquip.bonusHealth;
+        attackDamage -= gearToEquip.bonusDamage;
+        armor -= gearToEquip.bonusArmor;
+        attackSpeed -= gearToEquip.bonusAttackSpeed;
+        regenAmount -= gearToEquip.bonusRegen;
     }
 
     void Attack()

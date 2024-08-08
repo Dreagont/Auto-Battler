@@ -8,6 +8,8 @@ public class InventorySlotUi : MonoBehaviour
 {
     public Image itemSprite;
     public TextMeshProUGUI itemCount;
+    public Image holder;
+    public EquipableTag equipableTag = EquipableTag.None;
     [SerializeField] private InventorySlots assignedInventorySlot;
 
     public InventorySlots AssignedInventorySlot => assignedInventorySlot;
@@ -38,7 +40,7 @@ public class InventorySlotUi : MonoBehaviour
         {
             itemSprite.sprite = slot.ItemData.icon;
             itemSprite.color = Color.white;
-
+            holder.color = Color.clear;
             itemCount.text = slot.StackSize > 1 ? slot.StackSize.ToString() : "";
         }
         else
@@ -58,6 +60,18 @@ public class InventorySlotUi : MonoBehaviour
     public void ClearSlot()
     {
         assignedInventorySlot.ClearSlot();
+        itemSprite.sprite = null;
+        itemSprite.color = Color.clear;
+        itemCount.text = "";
+        if (equipableTag != EquipableTag.None)
+        {
+            holder.color = Color.white;
+        }
+    }
+
+    public void ClearSlot(InventorySlots slots)
+    {
+        slots.ClearSlot();
         itemSprite.sprite = null;
         itemSprite.color = Color.clear;
         itemCount.text = "";
