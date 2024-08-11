@@ -17,3 +17,15 @@ public class InventoryHolder : MonoBehaviour
         primaryInventorySystem = new InventorySystem(inventorySize);
     }
 }
+[System.Serializable]
+public struct InventorySaveData
+{
+    public InventorySystem InventorySystem;
+
+    public InventorySaveData(InventorySystem inventorySystem)
+    {
+        this.InventorySystem = inventorySystem;
+
+    }
+
+}
