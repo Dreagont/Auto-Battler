@@ -7,10 +7,12 @@ using Vector3 = UnityEngine.Vector3;
 
 public class SaveData 
 {
-    public SerializableDictionary<string, InventorySaveData> ChestDictionary;
+    public InventorySaveData playerInventory;
+    public InventorySaveData playerEquipment;
 
     public SaveData()
     {
-        ChestDictionary = new SerializableDictionary<string, InventorySaveData> ();
+        playerInventory = new InventorySaveData();
+        playerEquipment = new InventorySaveData();
     }
 }

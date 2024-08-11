@@ -27,5 +27,4 @@ public struct InventorySaveData
         this.InventorySystem = inventorySystem;
 
     }
-
 }
