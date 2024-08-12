@@ -5,7 +5,7 @@ using TMPro;
 public class Character : MonoBehaviour
 {
     [SerializeField] private float SumMaxhealth;
-    public float maxhealth = 100f;
+    public float maxHealth = 100f;
     public float health;
     public float attackSpeed = 1f;
     public float attackDamage = 50;
@@ -34,11 +34,14 @@ public class Character : MonoBehaviour
     public Canvas canvas;
     bool isFirstHit = true;
     public StaticInventoryDisplay GearInventory;
+    public EnemyHealthBar healthBar;
+
 
     void Start()
     {
         enemies = new List<Enemy>(FindObjectsOfType<Enemy>());
-        health = maxhealth;
+        health = maxHealth;
+        healthBar.UpdateBar(health, maxHealth);
         SelectNewTarget();
     }
 
@@ -64,11 +67,16 @@ public class Character : MonoBehaviour
         {
             health = SumMaxhealth;
         }
+
+        if (health < 0)
+        {
+            health = 0;
+        }
     }
 
     public void UpdatePlayerStast()
     {
-        SumMaxhealth = maxhealth + GearInventory.GearMaxhealth;
+        SumMaxhealth = maxHealth + GearInventory.GearMaxhealth;
         SumAttackDamage = attackDamage + GearInventory.GearAttackDamage;
         SumAttackSpeed = attackSpeed + GearInventory.GearAttackSpeed;
         SumArmor = armor + GearInventory.GearArmor;
@@ -137,6 +145,8 @@ public class Character : MonoBehaviour
                 amount = 1;
             }
             health -= amount;
+            healthBar.UpdateBar(health, maxHealth);
+
             RectTransform textTramform = Instantiate(damageText).GetComponent<RectTransform>();
             textTramform.transform.position = Camera.main.WorldToScreenPoint(gameObject.transform.position) + new Vector3(0, increase, 0);
 
@@ -181,13 +191,13 @@ public class Character : MonoBehaviour
         experience -= experienceToNextLevel;
         experienceToNextLevel *= experienceMultiplier;
 
-        maxhealth *= 1.05f;
+        maxHealth *= 1.05f;
         attackDamage *= 1.05f;
         armor *= 1.05f;
         regenAmount *= 1.05f;
         attackSpeed *= 1.05f;
 
-        health = maxhealth;
+        health = maxHealth;
 
         Debug.Log("Leveled Up! New Level: " + level);
     }
@@ -199,4 +209,8 @@ public class Character : MonoBehaviour
             SelectNewTarget();
         }
     }
+
+    internal bool IsHealthFull() => health == SumMaxhealth;
+
+    internal bool IsDead() => health <= 0;
 }

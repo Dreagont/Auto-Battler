@@ -204,12 +204,15 @@ MonoBehaviour:
   health: 0
   attackSpeed: 1
   armor: 0
+  damage: 0
   healthBar: {fileID: 7806442989304462873}
   damageText: {fileID: 6382206904851368114, guid: e28a7c1bd319d1341b0c202c93b0989c, type: 3}
   popupText: {fileID: 7899523419395991742, guid: e28a7c1bd319d1341b0c202c93b0989c, type: 3}
   increase: 60
   canvas: {fileID: 0}
-  enemyTypeData: {fileID: 11400000, guid: 2562641bc50943343bfd428611d53f84, type: 2}
+  enemyTypeData: {fileID: 11400000, guid: bd06e53a86c77114bbb49944ddc79d45, type: 2}
+  dropAmount: 1
+  goldDrop: 0
 --- !u!1 &4296703466771276407
 GameObject:
   m_ObjectHideFlags: 0

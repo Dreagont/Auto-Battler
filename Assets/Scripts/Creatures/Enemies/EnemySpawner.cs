@@ -11,6 +11,8 @@ public class EnemySpawner : MonoBehaviour
 
     private int enemiesKilled = 0;
     private int enemyLevel = 1;
+    private Enemy currentEnemy;
+    private bool stopSpawning = false;
 
     void Start()
     {
@@ -25,6 +27,8 @@ public class EnemySpawner : MonoBehaviour
 
     void SpawnEnemy()
     {
+        if (stopSpawning) return;
+
         if (spawnPoints.Length == 0)
         {
             Debug.LogError("No spawn points set for EnemySpawner.");
@@ -34,16 +38,15 @@ public class EnemySpawner : MonoBehaviour
         Transform spawnPoint = spawnPoints[currentSpawnIndex];
         int randomEnemyIndex = Random.Range(0, enemyPrefabs.Length);
         GameObject enemyObj = Instantiate(enemyPrefabs[randomEnemyIndex], spawnPoint.position, spawnPoint.rotation);
-        Enemy enemy = enemyObj.GetComponent<Enemy>();
+        currentEnemy = enemyObj.GetComponent<Enemy>();
 
-        if (enemy != null)
+        if (currentEnemy != null)
         {
             if (character != null)
             {
-                character.AddEnemy(enemy);
+                character.AddEnemy(currentEnemy);
             }
-            // Set the level of the newly spawned enemy
-            enemy.SetLevel(enemyLevel);
+            currentEnemy.SetLevel(enemyLevel);
         }
 
         currentSpawnIndex = (currentSpawnIndex + 1) % spawnPoints.Length;
@@ -56,7 +59,7 @@ public class EnemySpawner : MonoBehaviour
         if (enemiesKilled >= 20)
         {
             enemyLevel++;
-            enemiesKilled = 0; // Reset the kill counter
+            enemiesKilled = 0; 
         }
 
         StartCoroutine(SpawnEnemyAfterDelay());
@@ -66,5 +69,38 @@ public class EnemySpawner : MonoBehaviour
     {
         yield return new WaitForSeconds(spawnDelay);
         SpawnEnemy();
+    }
+
+    public void StopSpawningAndKillCurrentEnemy()
+    {
+        stopSpawning = true;
+
+        if (currentEnemy != null)
+        {
+            Destroy(currentEnemy.gameObject);
+            currentEnemy = null;
+        }
+    }
+
+    public void CheckPlayerHealthAndResumeSpawning()
+    {
+        if (character != null && character.IsHealthFull())
+        {
+            stopSpawning = false;
+            SpawnEnemy(); 
+        }
+    }
+
+    void Update()
+    {
+        if (character != null && character.IsDead())
+        {
+            StopSpawningAndKillCurrentEnemy();
+        }
+
+        if (stopSpawning && character != null && character.IsHealthFull())
+        {
+            CheckPlayerHealthAndResumeSpawning();
+        }
     }
 }

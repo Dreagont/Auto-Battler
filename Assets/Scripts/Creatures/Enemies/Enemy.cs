@@ -20,6 +20,7 @@ public class Enemy : MonoBehaviour
     public EnemyTypeData enemyTypeData;
     private ActionsManager actionsManager;
     public int dropAmount = 1;
+    public int goldDrop = 0;
 
     protected virtual void Start()
     {
@@ -45,15 +46,16 @@ public class Enemy : MonoBehaviour
 
     void ApplyEnemyType()
     {
-
         if (enemyTypeData != null)
         {
             int trueLevel = enemyTypeData.level - 1;
-            float levelStat = (float)trueLevel * 10;
+            float levelMultiplier = 1 + (trueLevel * 0.1f);
+
             attackSpeed = enemyTypeData.attackSpeed;
-            armor = enemyTypeData.armor + enemyTypeData.armor * levelStat/100;
-            maxHealth = enemyTypeData.maxHealth + enemyTypeData.maxHealth * levelStat / 100;
-            damage = enemyTypeData.damage + enemyTypeData.damage * levelStat / 100;
+            armor = enemyTypeData.armor * levelMultiplier;
+            maxHealth = enemyTypeData.maxHealth * levelMultiplier;
+            damage = enemyTypeData.damage * levelMultiplier;
+            goldDrop = Mathf.CeilToInt(enemyTypeData.gold * levelMultiplier);
             health = maxHealth;
         }
         else
@@ -61,6 +63,7 @@ public class Enemy : MonoBehaviour
             Debug.LogError("EnemyTypeData is not assigned.");
         }
     }
+
 
     protected virtual void Update()
     {
@@ -140,20 +143,25 @@ public class Enemy : MonoBehaviour
     }
     void DropItems()
     {
-
-        List<InventoryItemData> dropItems = enemyTypeData.dropItems;
-
-        if (dropItems != null && actionsManager != null)
+        if (enemyTypeData.dropItems != null && actionsManager != null)
         {
-            for (int i = 0; i < dropAmount; i++)
+            foreach (ItemDrop itemDrop in enemyTypeData.dropItems)
             {
-                int randomIndex = Random.Range(0, dropItems.Count);
-                actionsManager.PickupItem(dropItems[randomIndex]);
+                if (itemDrop.item != null)
+                {
+                    int quantity = Random.Range(itemDrop.minQuantity, itemDrop.maxQuantity + 1);
+                    for (int i = 0; i < quantity; i++)
+                    {
+                        actionsManager.PickupItem(itemDrop.item);
+                    }
+                }
             }
         }
         else
         {
             Debug.Log("Either dropItems or actionsManager is null.");
         }
+
+        actionsManager.GainGold(enemyTypeData.gold);
     }
 }

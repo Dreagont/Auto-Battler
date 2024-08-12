@@ -8,6 +8,7 @@ public class ActionsManager : MonoBehaviour
     public InventoryItemData itemData1;
     public InventoryItemData itemData2;
 
+    public GlobalResourceManager globalResourceManager;
 
     void Update()
     {
@@ -32,4 +33,9 @@ public class ActionsManager : MonoBehaviour
         InventoryHolder.AddToInventory(itemData, 1);
         Debug.Log("Picked up item: " + itemData.name);
     }
-}
+
+    public void GainGold(int amount)
+    {
+        globalResourceManager.Gold += amount;
+    }
+} 
