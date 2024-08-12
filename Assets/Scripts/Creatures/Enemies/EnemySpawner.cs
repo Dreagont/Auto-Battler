@@ -9,6 +9,9 @@ public class EnemySpawner : MonoBehaviour
     private Character character;
     public float spawnDelay = 1f;
 
+    private int enemiesKilled = 0;
+    private int enemyLevel = 1;
+
     void Start()
     {
         character = FindObjectOfType<Character>();
@@ -39,6 +42,8 @@ public class EnemySpawner : MonoBehaviour
             {
                 character.AddEnemy(enemy);
             }
+            // Set the level of the newly spawned enemy
+            enemy.SetLevel(enemyLevel);
         }
 
         currentSpawnIndex = (currentSpawnIndex + 1) % spawnPoints.Length;
@@ -46,12 +51,20 @@ public class EnemySpawner : MonoBehaviour
 
     public void OnEnemyKilled()
     {
+        enemiesKilled++;
+
+        if (enemiesKilled >= 20)
+        {
+            enemyLevel++;
+            enemiesKilled = 0; // Reset the kill counter
+        }
+
         StartCoroutine(SpawnEnemyAfterDelay());
     }
 
     IEnumerator SpawnEnemyAfterDelay()
     {
-        yield return new WaitForSeconds(spawnDelay);  
+        yield return new WaitForSeconds(spawnDelay);
         SpawnEnemy();
     }
 }

@@ -18,10 +18,9 @@ public class Enemy : MonoBehaviour
     public Canvas canvas;
     private EnemySpawner spawner;
     public EnemyTypeData enemyTypeData;
-    bool isFirstHit = true;
-    public List<InventoryItemData> dropItems; 
-    public int dropAmount = 1; 
     private ActionsManager actionsManager;
+    public int dropAmount = 1;
+
     protected virtual void Start()
     {
         ApplyEnemyType();
@@ -30,7 +29,6 @@ public class Enemy : MonoBehaviour
         character = FindObjectOfType<Character>();
         spawner = FindObjectOfType<EnemySpawner>();
         actionsManager = FindObjectOfType<ActionsManager>();
-
         if (canvas == null)
         {
             GameObject canvasObject = GameObject.FindWithTag("Canvas");
@@ -94,8 +92,6 @@ public class Enemy : MonoBehaviour
 
     public virtual void TakeDamage(float damage)
     {
-        if (!isFirstHit)
-        {
             float amount = Mathf.Max(0, damage - (int)armor);
             if (amount < 1)
             {
@@ -103,11 +99,22 @@ public class Enemy : MonoBehaviour
             }
             health -= amount;
             healthBar.UpdateBar(health, maxHealth);
-            RectTransform textTramform = Instantiate(damageText).GetComponent<RectTransform>();
-            textTramform.transform.position = Camera.main.WorldToScreenPoint(gameObject.transform.position) + new Vector3(0, increase, 0);
 
-            popupText.text = amount.ToString();
-            textTramform.SetParent(canvas.transform);
+            GameObject damageTextInstance = Instantiate(damageText);
+            RectTransform textTransform = damageTextInstance.GetComponent<RectTransform>();
+            textTransform.position = Camera.main.WorldToScreenPoint(transform.position) + new Vector3(0, increase, 0);
+
+            TMP_Text damageTextComponent = damageTextInstance.GetComponent<TMP_Text>();
+            if (damageTextComponent != null)
+            {
+                damageTextComponent.text = amount.ToString();
+            }
+            else
+            {
+                Debug.LogError("TMP_Text component not found on damage text prefab");
+            }
+
+            textTransform.SetParent(canvas.transform);
             if (health <= 0f)
             {
                 DropItems();
@@ -123,21 +130,21 @@ public class Enemy : MonoBehaviour
                 
 
                 Destroy(gameObject);
-            }
-        } else
-        {
-            isFirstHit = false;
-            return;
-        }
-        
+            }  
+    }
+
+    public void SetLevel(int level)
+    {
+        enemyTypeData.level = level;
+        ApplyEnemyType();
     }
     void DropItems()
     {
-        Debug.Log("DropItems called.");
+
+        List<InventoryItemData> dropItems = enemyTypeData.dropItems;
 
         if (dropItems != null && actionsManager != null)
         {
-            Debug.Log("Dropping items.");
             for (int i = 0; i < dropAmount; i++)
             {
                 int randomIndex = Random.Range(0, dropItems.Count);

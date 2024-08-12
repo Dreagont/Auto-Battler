@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Enemy System/Enemy Type")]
@@ -9,4 +10,5 @@ public class EnemyTypeData : ScriptableObject
     public float armor;
     public float damage;
     public int level = 1;
+    public List<InventoryItemData> dropItems;
 }

@@ -15,8 +15,6 @@ public abstract class InventoryDisplay : MonoBehaviour
 
     protected virtual void UpdateSlot(InventorySlots updatedSlot)
     {
-        Debug.LogWarning("Dynamic change");
-
         foreach (var slot in slotDictionary)
         {
             if (slot.Value == updatedSlot)

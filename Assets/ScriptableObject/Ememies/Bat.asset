@@ -17,3 +17,6 @@ MonoBehaviour:
   attackSpeed: 1
   armor: 10
   damage: 20
+  level: 3
+  dropItems:
+  - {fileID: 11400000, guid: 575faf8367ba540448446aa1f7d64364, type: 2}

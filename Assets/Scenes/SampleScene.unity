@@ -1391,71 +1391,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ac4234303385d74cb37ff3ff25e044a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1001 &674527901
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 2452360731241745265, guid: 10474f904007139448a5a582159192df, type: 3}
-      propertyPath: m_Name
-      value: Bat
-      objectReference: {fileID: 0}
-    - target: {fileID: 2452360731241745265, guid: 10474f904007139448a5a582159192df, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3561853764290999753, guid: 10474f904007139448a5a582159192df, type: 3}
-      propertyPath: actionsManager
-      value: 
-      objectReference: {fileID: 185663754}
-    - target: {fileID: 7304544796267711038, guid: 10474f904007139448a5a582159192df, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -5.0368547
-      objectReference: {fileID: 0}
-    - target: {fileID: 7304544796267711038, guid: 10474f904007139448a5a582159192df, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.42522883
-      objectReference: {fileID: 0}
-    - target: {fileID: 7304544796267711038, guid: 10474f904007139448a5a582159192df, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7304544796267711038, guid: 10474f904007139448a5a582159192df, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7304544796267711038, guid: 10474f904007139448a5a582159192df, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7304544796267711038, guid: 10474f904007139448a5a582159192df, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7304544796267711038, guid: 10474f904007139448a5a582159192df, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7304544796267711038, guid: 10474f904007139448a5a582159192df, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7304544796267711038, guid: 10474f904007139448a5a582159192df, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7304544796267711038, guid: 10474f904007139448a5a582159192df, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 10474f904007139448a5a582159192df, type: 3}
 --- !u!1 &735884944
 GameObject:
   m_ObjectHideFlags: 0
@@ -1882,7 +1817,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &882865160
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3421,10 +3356,14 @@ MonoBehaviour:
   SumMaxhealth: 0
   maxhealth: 100
   health: 100
-  attackSpeed: 2
+  attackSpeed: 0.75
   attackDamage: 50
   armor: 20
   regenAmount: 0.1
+  level: 1
+  experience: 0
+  experienceToNextLevel: 100
+  experienceMultiplier: 1.5
   damageText: {fileID: 6382206904851368114, guid: 234376b3e32c0df4ba264a8c990e4fb0, type: 3}
   popupText: {fileID: 7899523419395991742, guid: 234376b3e32c0df4ba264a8c990e4fb0, type: 3}
   increase: 60
@@ -5309,4 +5248,3 @@ SceneRoots:
   - {fileID: 976892442}
   - {fileID: 908769651}
   - {fileID: 1525015839}
-  - {fileID: 674527901}

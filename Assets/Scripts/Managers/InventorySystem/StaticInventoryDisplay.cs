@@ -70,6 +70,7 @@ public class StaticInventoryDisplay : InventoryDisplay
 
     public void GetGearStats(InventorySystem inventoryToDisplay)
     {
+        Debug.LogWarning("Gear Changed");
         GearMaxhealth = 0;
         GearArmor = 0;
         GearAttackDamage = 0;

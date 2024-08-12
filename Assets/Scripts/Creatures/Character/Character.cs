@@ -18,10 +18,13 @@ public class Character : MonoBehaviour
     private float SumArmor;
     private float SumRegenAmount;
 
-    
-
     private float attackCooldown = 0f;
     private float regenCooldown = 0f;
+
+    public int level = 1;
+    public float experience = 0f;
+    public float experienceToNextLevel = 100f;
+    public float experienceMultiplier = 1.5f;
 
     private List<Enemy> enemies;
     private Enemy currentTarget;
@@ -62,8 +65,6 @@ public class Character : MonoBehaviour
             health = SumMaxhealth;
         }
     }
-
-
 
     public void UpdatePlayerStast()
     {
@@ -108,7 +109,7 @@ public class Character : MonoBehaviour
 
         if (currentTarget != null)
         {
-            currentTarget.TakeDamage(attackDamage);
+            currentTarget.TakeDamage(SumAttackDamage);
         }
     }
 
@@ -161,8 +162,35 @@ public class Character : MonoBehaviour
         {
             SelectNewTarget();
         }
+
+        GainExperience(enemy.enemyTypeData.level * 10);
+    }
+    void GainExperience(float amount)
+    {
+        experience += amount;
+
+        if (experience >= experienceToNextLevel)
+        {
+            LevelUp();
+        }
     }
 
+    void LevelUp()
+    {
+        level++;
+        experience -= experienceToNextLevel;
+        experienceToNextLevel *= experienceMultiplier;
+
+        maxhealth *= 1.05f;
+        attackDamage *= 1.05f;
+        armor *= 1.05f;
+        regenAmount *= 1.05f;
+        attackSpeed *= 1.05f;
+
+        health = maxhealth;
+
+        Debug.Log("Leveled Up! New Level: " + level);
+    }
     public void AddEnemy(Enemy enemy)
     {
         enemies.Add(enemy);
