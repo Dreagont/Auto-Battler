@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -40,7 +41,7 @@ public abstract class InventoryDisplay : MonoBehaviour
     {
     }
 
-    public void SlotClicked(InventorySlotUi slot)
+    public void SlotLeftClicked(InventorySlotUi slot)
     {
         Debug.Log("Slot Clicked");
 
@@ -108,4 +109,8 @@ public abstract class InventoryDisplay : MonoBehaviour
         mouseInventoryItem.UpdateMouseSlot(tempSlot);
     }
 
+    internal void SlotRightClicked(InventorySlotUi slot)
+    {
+        Debug.Log(slot.AssignedInventorySlot.ItemData.displayName);
+    }
 }

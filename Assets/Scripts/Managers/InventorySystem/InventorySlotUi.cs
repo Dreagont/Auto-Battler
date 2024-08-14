@@ -1,10 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using TMPro;
 
-public class InventorySlotUi : MonoBehaviour
+public class InventorySlotUi : MonoBehaviour, IPointerClickHandler
 {
     public Image itemSprite;
     public TextMeshProUGUI itemCount;
@@ -23,7 +22,7 @@ public class InventorySlotUi : MonoBehaviour
         ClearSlot();
 
         button = GetComponent<Button>();
-        button?.onClick.AddListener(OnUISlotClick);
+        button?.onClick.AddListener(OnUISlotClick); // This handles left-clicks
 
         ParentDisplay = transform.parent.GetComponent<InventoryDisplay>();
     }
@@ -79,6 +78,24 @@ public class InventorySlotUi : MonoBehaviour
 
     public void OnUISlotClick()
     {
-        ParentDisplay?.SlotClicked(this);
+        ParentDisplay?.SlotLeftClicked(this);
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            OnUISlotClick();
+        }
+        else if (eventData.button == PointerEventData.InputButton.Right)
+        {
+            OnUISlotRightClick();
+        }
+    }
+
+    public void OnUISlotRightClick()
+    {
+        ParentDisplay?.SlotRightClicked(this);
+        Debug.Log("Right-clicked on slot: " + name);
     }
 }

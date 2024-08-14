@@ -34,7 +34,9 @@ public class Character : MonoBehaviour
     public Canvas canvas;
     bool isFirstHit = true;
     public StaticInventoryDisplay GearInventory;
-    public EnemyHealthBar healthBar;
+    public BarManager healthBar;
+
+    public GlobalResourceManager GlobalResourceManager;
 
 
     void Start()
@@ -48,12 +50,19 @@ public class Character : MonoBehaviour
     void Update()
     {
         UpdatePlayerStast();
-        attackCooldown -= Time.deltaTime;
-        if (attackCooldown <= 0f)
+
+        int temp = GlobalResourceManager.UseAbleEnergy - 10;
+
+        if (temp >= 0)
         {
-            Attack();
-            attackCooldown = 1f / SumAttackSpeed;
+            attackCooldown -= Time.deltaTime;
+            if (attackCooldown <= 0f)
+            {
+                Attack();
+                attackCooldown = 1f / SumAttackSpeed;
+            }
         }
+
         if (health < SumMaxhealth)
         {
             regenCooldown -= Time.deltaTime;
@@ -85,7 +94,8 @@ public class Character : MonoBehaviour
 
     public void RegenHealth()
     {
-        health += SumRegenAmount;    
+        health += SumRegenAmount;
+        healthBar.UpdateBar(health, maxHealth);
     }
 
     public void EquipGear(InventoryItemData gearToEquip)
@@ -108,6 +118,7 @@ public class Character : MonoBehaviour
 
     void Attack()
     {
+
         enemies.RemoveAll(enemy => enemy == null);
 
         if (currentTarget == null)
@@ -117,6 +128,7 @@ public class Character : MonoBehaviour
 
         if (currentTarget != null)
         {
+            GlobalResourceManager.UseAbleEnergy -= 10;
             currentTarget.TakeDamage(SumAttackDamage);
         }
     }

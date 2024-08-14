@@ -11,7 +11,7 @@ public class Enemy : MonoBehaviour
     public float damage;
     private float attackCooldown = 0f;
     private Character character;
-    public EnemyHealthBar healthBar;
+    public BarManager healthBar;
     public GameObject damageText;
     public TMP_Text popupText;
     public float increase;
@@ -95,45 +95,45 @@ public class Enemy : MonoBehaviour
 
     public virtual void TakeDamage(float damage)
     {
-            float amount = Mathf.Max(0, damage - (int)armor);
-            if (amount < 1)
-            {
-                amount = 1;
-            }
-            health -= amount;
-            healthBar.UpdateBar(health, maxHealth);
+        float amount = Mathf.Max(0, damage - (int)armor);
+        if (amount < 1)
+        {
+            amount = 1;
+        }
+        health -= amount;
+        healthBar.UpdateBar(health, maxHealth);
 
-            GameObject damageTextInstance = Instantiate(damageText);
-            RectTransform textTransform = damageTextInstance.GetComponent<RectTransform>();
-            textTransform.position = Camera.main.WorldToScreenPoint(transform.position) + new Vector3(0, increase, 0);
+        GameObject damageTextInstance = Instantiate(damageText);
+        RectTransform textTransform = damageTextInstance.GetComponent<RectTransform>();
+        textTransform.position = Camera.main.WorldToScreenPoint(transform.position) + new Vector3(0, increase, 0);
 
-            TMP_Text damageTextComponent = damageTextInstance.GetComponent<TMP_Text>();
-            if (damageTextComponent != null)
-            {
-                damageTextComponent.text = amount.ToString();
-            }
-            else
-            {
-                Debug.LogError("TMP_Text component not found on damage text prefab");
-            }
+        TMP_Text damageTextComponent = damageTextInstance.GetComponent<TMP_Text>();
+        if (damageTextComponent != null)
+        {
+            damageTextComponent.text = amount.ToString();
+        }
+        else
+        {
+            Debug.LogError("TMP_Text component not found on damage text prefab");
+        }
 
-            textTransform.SetParent(canvas.transform);
-            if (health <= 0f)
+        textTransform.SetParent(canvas.transform);
+        if (health <= 0f)
+        {
+            DropItems();
+            Debug.LogError(name + " has died.");
+            if (character != null)
             {
-                DropItems();
-                Debug.LogError(name + " has died.");
-                if (character != null)
-                {
-                    character.EnemyDestroyed(this);
-                }
-                if (spawner != null)
-                {
-                    spawner.OnEnemyKilled();
-                }
+                character.EnemyDestroyed(this);
+            }
+            if (spawner != null)
+            {
+                spawner.OnEnemyKilled();
+            }
                 
 
-                Destroy(gameObject);
-            }  
+            Destroy(gameObject);
+        }  
     }
 
     public void SetLevel(int level)

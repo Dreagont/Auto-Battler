@@ -13,6 +13,9 @@ public class InventoryItemData : ScriptableObject
 
     public ItemType itemType1;
     public ItemType itemType2;
+
+    public ConsumeStats consumeStats;
+
     public EquipableTag EquipableTag;
 
     public int bonusHealth;
@@ -37,4 +40,11 @@ public enum EquipableTag
     Weapon,
     Helmet,
     Boots
+}
+
+[System.Serializable]
+public class ConsumeStats
+{
+    public int GoldGain;
+    public int EnergyGain;
 }

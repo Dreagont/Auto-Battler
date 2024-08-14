@@ -19,6 +19,9 @@ MonoBehaviour:
   MaxStackSize: 5
   itemType1: 2
   itemType2: 3
+  consumeStats:
+    GoldGain: 15
+    EnergyGain: 100
   EquipableTag: 0
   bonusHealth: 0
   bonusArmor: 0
