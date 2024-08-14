@@ -1,9 +1,10 @@
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.EventSystems;
+using System.Collections;
 using TMPro;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public class InventorySlotUi : MonoBehaviour, IPointerClickHandler
+public class InventorySlotUi : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public Image itemSprite;
     public TextMeshProUGUI itemCount;
@@ -22,7 +23,7 @@ public class InventorySlotUi : MonoBehaviour, IPointerClickHandler
         ClearSlot();
 
         button = GetComponent<Button>();
-        button?.onClick.AddListener(OnUISlotClick); // This handles left-clicks
+        button?.onClick.AddListener(OnUISlotClick);
 
         ParentDisplay = transform.parent.GetComponent<InventoryDisplay>();
     }
@@ -78,24 +79,31 @@ public class InventorySlotUi : MonoBehaviour, IPointerClickHandler
 
     public void OnUISlotClick()
     {
-        ParentDisplay?.SlotLeftClicked(this);
+        ParentDisplay?.SlotClicked(this);
     }
 
-    public void OnPointerClick(PointerEventData eventData)
+    private Coroutine showTooltipCoroutine;
+
+    public void OnPointerEnter(PointerEventData eventData)
     {
-        if (eventData.button == PointerEventData.InputButton.Left)
+        if (assignedInventorySlot.ItemData != null)
         {
-            OnUISlotClick();
-        }
-        else if (eventData.button == PointerEventData.InputButton.Right)
-        {
-            OnUISlotRightClick();
+            showTooltipCoroutine = StartCoroutine(ShowTooltipDelayed());
         }
     }
 
-    public void OnUISlotRightClick()
+    public void OnPointerExit(PointerEventData eventData)
     {
-        ParentDisplay?.SlotRightClicked(this);
-        Debug.Log("Right-clicked on slot: " + name);
+        if (showTooltipCoroutine != null)
+        {
+            StopCoroutine(showTooltipCoroutine);
+        }
+        TooltipManager.instance.HideTooltip();
+    }
+
+    private IEnumerator ShowTooltipDelayed()
+    {
+        yield return new WaitForSeconds(0.5f); // Adjust this delay as needed
+        TooltipManager.instance.SetAndShowToolTip(assignedInventorySlot.ItemData.icon,assignedInventorySlot.ItemData.displayName, assignedInventorySlot.ItemData.description);
     }
 }

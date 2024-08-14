@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -41,7 +40,7 @@ public abstract class InventoryDisplay : MonoBehaviour
     {
     }
 
-    public void SlotLeftClicked(InventorySlotUi slot)
+    public void SlotClicked(InventorySlotUi slot)
     {
         Debug.Log("Slot Clicked");
 
@@ -61,8 +60,8 @@ public abstract class InventoryDisplay : MonoBehaviour
                 slot.UpdateInventorySlot();
                 mouseInventoryItem.ClearSlot();
             }
-            
-            
+
+
         }
         else if (slot.AssignedInventorySlot.ItemData != null && mouseInventoryItem.AsssignedInventorySlot != null)
         {
@@ -109,8 +108,4 @@ public abstract class InventoryDisplay : MonoBehaviour
         mouseInventoryItem.UpdateMouseSlot(tempSlot);
     }
 
-    internal void SlotRightClicked(InventorySlotUi slot)
-    {
-        Debug.Log(slot.AssignedInventorySlot.ItemData.displayName);
-    }
 }
