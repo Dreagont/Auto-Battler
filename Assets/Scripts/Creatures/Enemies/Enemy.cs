@@ -24,6 +24,8 @@ public class Enemy : MonoBehaviour
     public int goldDrop = 0;
     public EnemyTraits EnemyTraits;
     public int level;
+    public TextMeshProUGUI currentLevelText;
+
     protected virtual void Start()
     {
         InitializeEnemy();
@@ -65,6 +67,8 @@ public class Enemy : MonoBehaviour
 
     protected virtual void Update()
     {
+        currentLevelText.text = "LV." + level.ToString();
+
         attackCooldown -= Time.deltaTime;
         if (attackCooldown <= 0f)
         {

@@ -34,6 +34,8 @@ public class Character : MonoBehaviour
     public Canvas canvas;
     public StaticInventoryDisplay GearInventory;
     public BarManager healthBar;
+    public BarManager EXPBar;
+    public TextMeshProUGUI currentLevelText;
 
     public GlobalResourceManager GlobalResourceManager;
     private bool Died = false;
@@ -43,6 +45,7 @@ public class Character : MonoBehaviour
         enemies = new List<Enemy>(FindObjectsOfType<Enemy>());
         health = baseMaxHealth;
         healthBar.UpdateBar(health, baseMaxHealth);
+        EXPBar.UpdateBar(experience, baseExperienceToNextLevel);
         SelectNewTarget();
     }
 
@@ -50,10 +53,14 @@ public class Character : MonoBehaviour
     {
         UpdatePlayerStast();
 
+        currentLevelText.text = "LV." + level.ToString();
+
         if (IsHealthFull())
         {
             Died = false ;
         }
+
+        EXPBar.UpdateBar(experience, baseExperienceToNextLevel);
 
         int temp = GlobalResourceManager.UseAbleEnergy - 10;
 

@@ -1,11 +1,14 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class SaveGameManager : MonoBehaviour
 {
     public static SaveData data;
-
+    public GameObject SaveLoadPanel;
     private void Awake()
     {
         if (data == null)
@@ -14,6 +17,19 @@ public class SaveGameManager : MonoBehaviour
         }
 
         SaveLoad.OnLoadGame += LoadData;
+        SaveLoadPanel.gameObject.SetActive(false);
+    }
+
+    public void ToggleSaveLoad()
+    {
+        if (SaveLoadPanel.gameObject.activeInHierarchy)
+        {
+            SaveLoadPanel.SetActive(false);
+        }
+        else
+        {
+            SaveLoadPanel.SetActive(true);
+        }
     }
 
     public static void SaveData()

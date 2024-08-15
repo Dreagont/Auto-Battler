@@ -10,6 +10,13 @@ public class ActionsManager : MonoBehaviour
 
     public GlobalResourceManager globalResourceManager;
 
+    public GameObject TimePanel;
+
+    private void Start()
+    {
+        TimePanel.SetActive(false);
+    }
+
     void Update()
     {
         Pickup();
@@ -34,5 +41,26 @@ public class ActionsManager : MonoBehaviour
     public void GainGold(int amount)
     {
         globalResourceManager.Gold += amount;
+    }
+
+    public void ToggleTimePanel()
+    {
+        if (TimePanel.gameObject.activeInHierarchy)
+        {
+            TimePanel.SetActive(false) ;
+        } else
+        {
+            TimePanel.SetActive(true);
+        }
+    }
+
+    public void SpeedUpTime(float multiplier)
+    {
+        Time.timeScale = multiplier;
+    }
+
+    public void ResetTime()
+    {
+        Time.timeScale = 1f;
     }
 } 
