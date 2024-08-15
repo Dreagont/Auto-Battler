@@ -16,7 +16,7 @@ public static class ReuseMethod
         }
         else
         {
-            return number.ToString("0.0");
+            return number.ToString("0");
         }
     }
 

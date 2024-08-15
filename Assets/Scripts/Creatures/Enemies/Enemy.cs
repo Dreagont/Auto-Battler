@@ -9,6 +9,7 @@ public class Enemy : MonoBehaviour
     public float attackSpeed = 1f;
     public float armor;
     public float damage;
+
     private float attackCooldown = 0f;
     private Character character;
     public BarManager healthBar;
@@ -21,11 +22,12 @@ public class Enemy : MonoBehaviour
     private ActionsManager actionsManager;
     public int dropAmount = 1;
     public int goldDrop = 0;
-
+    public EnemyTraits EnemyTraits;
+    public int level;
     protected virtual void Start()
     {
-        ApplyEnemyType();
-
+        InitializeEnemy();
+        EnemyTraits = enemyTypeData.enemyTraits;
         healthBar.UpdateBar(health, maxHealth);
         character = FindObjectOfType<Character>();
         spawner = FindObjectOfType<EnemySpawner>();
@@ -44,24 +46,20 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    void ApplyEnemyType()
+    private void InitializeEnemy()
     {
-        if (enemyTypeData != null)
-        {
-            int trueLevel = enemyTypeData.level - 1;
-            float levelMultiplier = 1 + (trueLevel * 0.1f);
+        maxHealth = enemyTypeData.GetMaxHealth(enemyTypeData.level);
+        health = maxHealth;
+        attackSpeed = enemyTypeData.GetAttackSpeed(enemyTypeData.level);
+        armor = enemyTypeData.GetArmor(enemyTypeData.level);
+        damage = enemyTypeData.GetDamage(enemyTypeData.level);
+        level = enemyTypeData.level;
+    }
 
-            attackSpeed = enemyTypeData.attackSpeed;
-            armor = enemyTypeData.armor * levelMultiplier;
-            maxHealth = enemyTypeData.maxHealth * levelMultiplier;
-            damage = enemyTypeData.damage * levelMultiplier;
-            goldDrop = Mathf.CeilToInt(enemyTypeData.gold * levelMultiplier);
-            health = maxHealth;
-        }
-        else
-        {
-            Debug.LogError("EnemyTypeData is not assigned.");
-        }
+    public void SetTrait(EnemyTraits trait)
+    {
+        enemyTypeData.enemyTraits = trait;
+        InitializeEnemy();
     }
 
 
@@ -110,7 +108,7 @@ public class Enemy : MonoBehaviour
         TMP_Text damageTextComponent = damageTextInstance.GetComponent<TMP_Text>();
         if (damageTextComponent != null)
         {
-            damageTextComponent.text = amount.ToString();
+            damageTextComponent.text = ReuseMethod.FormatNumber(amount);
         }
         else
         {
@@ -121,7 +119,6 @@ public class Enemy : MonoBehaviour
         if (health <= 0f)
         {
             DropItems();
-            Debug.LogError(name + " has died.");
             if (character != null)
             {
                 character.EnemyDestroyed(this);
@@ -139,7 +136,7 @@ public class Enemy : MonoBehaviour
     public void SetLevel(int level)
     {
         enemyTypeData.level = level;
-        ApplyEnemyType();
+        InitializeEnemy();
     }
     void DropItems()
     {
@@ -149,10 +146,14 @@ public class Enemy : MonoBehaviour
             {
                 if (itemDrop.item != null)
                 {
-                    int quantity = Random.Range(itemDrop.minQuantity, itemDrop.maxQuantity + 1);
-                    for (int i = 0; i < quantity; i++)
+                    float roll = Random.Range(0f, 1f);
+                    if (roll <= itemDrop.itemDropChance)
                     {
-                        actionsManager.PickupItem(itemDrop.item);
+                        int quantity = Random.Range(itemDrop.minQuantity, itemDrop.maxQuantity + 1);
+                        for (int i = 0; i < quantity; i++)
+                        {
+                            actionsManager.PickupItem(itemDrop.item);
+                        }
                     }
                 }
             }
@@ -162,6 +163,11 @@ public class Enemy : MonoBehaviour
             Debug.Log("Either dropItems or actionsManager is null.");
         }
 
-        actionsManager.GainGold(enemyTypeData.gold);
+        actionsManager.GainGold(enemyTypeData.baseGold);
+    }
+
+    internal void SetEnemyTypeData(EnemyTypeData clonedEnemyTypeData)
+    {
+        this.enemyTypeData = clonedEnemyTypeData;
     }
 }

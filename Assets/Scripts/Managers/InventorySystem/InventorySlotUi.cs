@@ -4,13 +4,14 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class InventorySlotUi : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class InventorySlotUi : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     public Image itemSprite;
     public TextMeshProUGUI itemCount;
     public Image holder;
     public EquipableTag equipableTag = EquipableTag.None;
     [SerializeField] private InventorySlots assignedInventorySlot;
+    private GlobalResourceManager GlobalResourceManager;
 
     public InventorySlots AssignedInventorySlot => assignedInventorySlot;
 
@@ -18,12 +19,15 @@ public class InventorySlotUi : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     public InventoryDisplay ParentDisplay { get; private set; }
 
+    private Coroutine showTooltipCoroutine;
+
     private void Awake()
     {
         ClearSlot();
 
         button = GetComponent<Button>();
         button?.onClick.AddListener(OnUISlotClick);
+        GlobalResourceManager = FindObjectOfType<GlobalResourceManager>();
 
         ParentDisplay = transform.parent.GetComponent<InventoryDisplay>();
     }
@@ -82,8 +86,6 @@ public class InventorySlotUi : MonoBehaviour, IPointerEnterHandler, IPointerExit
         ParentDisplay?.SlotClicked(this);
     }
 
-    private Coroutine showTooltipCoroutine;
-
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (assignedInventorySlot.ItemData != null)
@@ -101,9 +103,36 @@ public class InventorySlotUi : MonoBehaviour, IPointerEnterHandler, IPointerExit
         TooltipManager.instance.HideTooltip();
     }
 
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (eventData.button == PointerEventData.InputButton.Right)
+        {
+            UseItem();
+        }
+    }
+
     private IEnumerator ShowTooltipDelayed()
     {
-        yield return new WaitForSeconds(0.5f); // Adjust this delay as needed
-        TooltipManager.instance.SetAndShowToolTip(assignedInventorySlot.ItemData.icon,assignedInventorySlot.ItemData.displayName, assignedInventorySlot.ItemData.description);
+        yield return new WaitForSeconds(0.1f);
+        if (assignedInventorySlot.ItemData != null)
+        {
+            TooltipManager.instance.SetAndShowToolTip(assignedInventorySlot.ItemData.icon, assignedInventorySlot.ItemData.displayName, assignedInventorySlot.ItemData.description);
+
+        }
+    }
+
+    public void UseItem()
+    {
+        if (assignedInventorySlot.ItemData != null && assignedInventorySlot.StackSize > 0)
+        {
+            if (assignedInventorySlot.ItemData.itemType1 == ItemType.Consumable || assignedInventorySlot.ItemData.itemType2 == ItemType.Consumable)
+            {
+                GlobalResourceManager.Gold += assignedInventorySlot.ItemData.consumeStats.GoldGain;
+                GlobalResourceManager.ExchangeAbleEnergy += assignedInventorySlot.ItemData.consumeStats.EnergyGain;
+
+                assignedInventorySlot.RemoveFromStack(1);
+                UpdateInventorySlot();
+            }
+        }
     }
 }

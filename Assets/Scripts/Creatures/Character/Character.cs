@@ -5,12 +5,12 @@ using TMPro;
 public class Character : MonoBehaviour
 {
     [SerializeField] private float SumMaxhealth;
-    public float maxHealth = 100f;
+    public float baseMaxHealth = 100f;
     public float health;
-    public float attackSpeed = 1f;
-    public float attackDamage = 50;
-    public float armor = 5;
-    public float regenAmount = 0.1f;
+    public float baseAttackSpeed = 1f;
+    public float baseAttackDamage = 10f;
+    public float baseArmor = 5;
+    public float baseRegenAmount = 0.1f;
 
     private float SumHealth;
     private float SumAttackSpeed;
@@ -23,7 +23,7 @@ public class Character : MonoBehaviour
 
     public int level = 1;
     public float experience = 0f;
-    public float experienceToNextLevel = 100f;
+    public float baseExperienceToNextLevel = 100f;
     public float experienceMultiplier = 1.5f;
 
     private List<Enemy> enemies;
@@ -32,24 +32,28 @@ public class Character : MonoBehaviour
     public TMP_Text popupText;
     public float increase;
     public Canvas canvas;
-    bool isFirstHit = true;
     public StaticInventoryDisplay GearInventory;
     public BarManager healthBar;
 
     public GlobalResourceManager GlobalResourceManager;
-
+    private bool Died = false;
 
     void Start()
     {
         enemies = new List<Enemy>(FindObjectsOfType<Enemy>());
-        health = maxHealth;
-        healthBar.UpdateBar(health, maxHealth);
+        health = baseMaxHealth;
+        healthBar.UpdateBar(health, baseMaxHealth);
         SelectNewTarget();
     }
 
     void Update()
     {
         UpdatePlayerStast();
+
+        if (IsHealthFull())
+        {
+            Died = false ;
+        }
 
         int temp = GlobalResourceManager.UseAbleEnergy - 10;
 
@@ -85,35 +89,25 @@ public class Character : MonoBehaviour
 
     public void UpdatePlayerStast()
     {
-        SumMaxhealth = maxHealth + GearInventory.GearMaxhealth;
-        SumAttackDamage = attackDamage + GearInventory.GearAttackDamage;
-        SumAttackSpeed = attackSpeed + GearInventory.GearAttackSpeed;
-        SumArmor = armor + GearInventory.GearArmor;
-        SumRegenAmount = regenAmount + GearInventory.GearRegenAmount;
+        SumMaxhealth = baseMaxHealth + GearInventory.GearMaxhealth;
+        SumAttackDamage = baseAttackDamage + GearInventory.GearAttackDamage;
+        SumAttackSpeed = baseAttackSpeed + GearInventory.GearAttackSpeed;
+        SumArmor = baseArmor + GearInventory.GearArmor;
+        SumRegenAmount = baseRegenAmount + GearInventory.GearRegenAmount;
+        healthBar.UpdateBar(health, SumMaxhealth);
     }
 
     public void RegenHealth()
     {
-        health += SumRegenAmount;
-        healthBar.UpdateBar(health, maxHealth);
-    }
-
-    public void EquipGear(InventoryItemData gearToEquip)
-    {
-        health += gearToEquip.bonusHealth;
-        attackDamage += gearToEquip.bonusDamage;
-        armor += gearToEquip.bonusArmor;
-        attackSpeed += gearToEquip.bonusAttackSpeed;
-        regenAmount += gearToEquip.bonusRegen;
-    }
-
-    public void UnEquipGear(InventoryItemData gearToEquip)
-    {
-        health -= gearToEquip.bonusHealth;
-        attackDamage -= gearToEquip.bonusDamage;
-        armor -= gearToEquip.bonusArmor;
-        attackSpeed -= gearToEquip.bonusAttackSpeed;
-        regenAmount -= gearToEquip.bonusRegen;
+        if (Died)
+        {
+            health += SumRegenAmount * 10;
+        } else
+        {
+            health += SumRegenAmount;
+        }
+        
+        healthBar.UpdateBar(health, baseMaxHealth);
     }
 
     void Attack()
@@ -149,34 +143,35 @@ public class Character : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        if (!isFirstHit)
+        float amount = damage - baseArmor;
+        if (amount < 1)
         {
-            float amount = damage - armor;
-            if (amount < 1)
-            {
-                amount = 1;
-            }
-            health -= amount;
-            healthBar.UpdateBar(health, maxHealth);
+            amount = 1;
+        }
+        health -= amount;
+        healthBar.UpdateBar(health, baseMaxHealth);
 
-            RectTransform textTramform = Instantiate(damageText).GetComponent<RectTransform>();
-            textTramform.transform.position = Camera.main.WorldToScreenPoint(gameObject.transform.position) + new Vector3(0, increase, 0);
+        GameObject damageTextInstance = Instantiate(damageText);
+        RectTransform textTransform = damageTextInstance.GetComponent<RectTransform>();
+        textTransform.position = Camera.main.WorldToScreenPoint(transform.position) + new Vector3(0, increase, 0);
 
-            popupText.text = amount.ToString();
-            textTramform.SetParent(canvas.transform);
-
-            if (health <= 0f)
-            {
-                Debug.LogError("Character has died.");
-            }
-        } else
+        TMP_Text damageTextComponent = damageTextInstance.GetComponent<TMP_Text>();
+        if (damageTextComponent != null)
         {
-            isFirstHit = false;
-            return;
+            damageTextComponent.text = ReuseMethod.FormatNumber(amount);
+        }
+        else
+        {
+            Debug.LogError("TMP_Text component not found on damage text prefab");
+        }
+        textTransform.SetParent(canvas.transform);
+
+        if (health <= 0f)
+        {
+            Died = true;
         }
         
     }
-
     public void EnemyDestroyed(Enemy enemy)
     {
         enemies.Remove(enemy);
@@ -185,13 +180,13 @@ public class Character : MonoBehaviour
             SelectNewTarget();
         }
 
-        GainExperience(enemy.enemyTypeData.level * 10);
+        GainExperience(enemy.enemyTypeData.GetExperienceValue(enemy.enemyTypeData.level));
     }
     void GainExperience(float amount)
     {
         experience += amount;
 
-        if (experience >= experienceToNextLevel)
+        if (experience >= baseExperienceToNextLevel)
         {
             LevelUp();
         }
@@ -200,16 +195,16 @@ public class Character : MonoBehaviour
     void LevelUp()
     {
         level++;
-        experience -= experienceToNextLevel;
-        experienceToNextLevel *= experienceMultiplier;
+        experience -= baseExperienceToNextLevel;
+        baseExperienceToNextLevel *= experienceMultiplier;
 
-        maxHealth *= 1.05f;
-        attackDamage *= 1.05f;
-        armor *= 1.05f;
-        regenAmount *= 1.05f;
-        attackSpeed *= 1.05f;
+        baseMaxHealth *= 1.05f;
+        baseAttackDamage *= 1.05f;
+        baseArmor *= 1.05f;
+        baseRegenAmount *= 1.05f;
+        baseAttackSpeed *= 1.05f;
 
-        health = maxHealth;
+        health = baseMaxHealth;
 
         Debug.Log("Leveled Up! New Level: " + level);
     }

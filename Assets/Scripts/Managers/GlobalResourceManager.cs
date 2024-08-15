@@ -42,6 +42,11 @@ public class GlobalResourceManager : MonoBehaviour
             UseAbleEnergy = MaxUseAbleEnergy;
         }
 
+        if (ExchangeAbleEnergy > MaxExchangeAbleEnergy)
+        {
+            ExchangeAbleEnergy = MaxExchangeAbleEnergy;
+        }
+
         if (ExchangeAbleEnergy <= 0)
         {
             ExchangeAbleEnergy = 0;

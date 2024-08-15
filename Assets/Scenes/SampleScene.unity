@@ -1095,7 +1095,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 174.35, y: -77.61}
-  m_SizeDelta: {x: 348.7, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &168561390
 MonoBehaviour:
@@ -3208,6 +3208,12 @@ MonoBehaviour:
   spawnPoints:
   - {fileID: 882865161}
   spawnDelay: 0.5
+  enemiesKilledToLevel: 0
+  enemiesKilledToSpawnTrait: 0
+  levelUpCount: 3
+  countToElite: 5
+  countToBoss: 10
+  countToChapterBoss: 50
 --- !u!4 &882865161
 Transform:
   m_ObjectHideFlags: 0
@@ -7720,15 +7726,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SumMaxhealth: 0
-  maxHealth: 100
+  baseMaxHealth: 100
   health: 100
-  attackSpeed: 0.75
-  attackDamage: 50
-  armor: 20
-  regenAmount: 20
+  baseAttackSpeed: 1
+  baseAttackDamage: 10
+  baseArmor: 0
+  baseRegenAmount: 1
   level: 1
   experience: 0
-  experienceToNextLevel: 100
+  baseExperienceToNextLevel: 100
   experienceMultiplier: 1.5
   damageText: {fileID: 6382206904851368114, guid: 234376b3e32c0df4ba264a8c990e4fb0, type: 3}
   popupText: {fileID: 7899523419395991742, guid: 234376b3e32c0df4ba264a8c990e4fb0, type: 3}

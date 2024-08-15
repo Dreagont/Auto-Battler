@@ -54,7 +54,15 @@ public class InventorySlots : ISerializationCallbackReceiver
 
     public void RemoveFromStack(int amount)
     {
-        stackSize -= amount;
+        if (stackSize == 1)
+        {
+            stackSize -= amount;
+            ClearSlot();
+        } else
+        {
+            stackSize -= amount;
+
+        }
     }
 
     public void ClearSlot()

@@ -9,10 +9,16 @@ public class EnemySpawner : MonoBehaviour
     private Character character;
     public float spawnDelay = 1f;
 
-    private int enemiesKilled = 0;
+    public int enemiesKilledToLevel = 0;
+    public int enemiesKilledToSpawnTrait = 0;
     private int enemyLevel = 1;
     private Enemy currentEnemy;
     private bool stopSpawning = false;
+
+    public int levelUpCount = 10;
+    public int countToElite = 5;
+    public int countToBoss = 20;
+    public int countToChapterBoss = 50;
 
     void Start()
     {
@@ -39,6 +45,8 @@ public class EnemySpawner : MonoBehaviour
         int randomEnemyIndex = Random.Range(0, enemyPrefabs.Length);
         GameObject enemyObj = Instantiate(enemyPrefabs[randomEnemyIndex], spawnPoint.position, spawnPoint.rotation);
         currentEnemy = enemyObj.GetComponent<Enemy>();
+        currentEnemy.enemyTypeData.level = enemyLevel;
+        currentEnemy.enemyTypeData.enemyTraits = EnemyTraits.Normal;
 
         if (currentEnemy != null)
         {
@@ -47,6 +55,24 @@ public class EnemySpawner : MonoBehaviour
                 character.AddEnemy(currentEnemy);
             }
             currentEnemy.SetLevel(enemyLevel);
+
+            if (enemiesKilledToSpawnTrait == countToChapterBoss)
+            {
+                currentEnemy.SetTrait(EnemyTraits.ChapterBoss);
+                enemiesKilledToSpawnTrait = 0;
+            }
+            else if (enemiesKilledToSpawnTrait == countToBoss)
+            {
+                currentEnemy.SetTrait(EnemyTraits.Boss);
+            }
+            else if (enemiesKilledToSpawnTrait == countToElite)
+            {
+                currentEnemy.SetTrait(EnemyTraits.Elite);
+            }
+            else
+            {
+                currentEnemy.SetTrait(EnemyTraits.Normal);
+            }
         }
 
         currentSpawnIndex = (currentSpawnIndex + 1) % spawnPoints.Length;
@@ -54,12 +80,13 @@ public class EnemySpawner : MonoBehaviour
 
     public void OnEnemyKilled()
     {
-        enemiesKilled++;
+        enemiesKilledToLevel++;
+        enemiesKilledToSpawnTrait++;
 
-        if (enemiesKilled >= 20)
+        if (enemiesKilledToLevel >= levelUpCount)
         {
             enemyLevel++;
-            enemiesKilled = 0; 
+            enemiesKilledToLevel = 0; 
         }
 
         StartCoroutine(SpawnEnemyAfterDelay());
@@ -96,6 +123,7 @@ public class EnemySpawner : MonoBehaviour
         if (character != null && character.IsDead())
         {
             StopSpawningAndKillCurrentEnemy();
+            enemiesKilledToSpawnTrait = 0;
         }
 
         if (stopSpawning && character != null && character.IsHealthFull())

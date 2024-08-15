@@ -13,18 +13,16 @@ MonoBehaviour:
   m_Name: New Enemy Type Data
   m_EditorClassIdentifier: Assembly-CSharp::EnemyTypeData
   enemyTypeName: Zombie
-  maxHealth: 100
-  attackSpeed: 1
-  armor: 10
-  damage: 50
-  level: 1
-  gold: 10
+  baseMaxHealth: 50
+  baseAttackSpeed: 0.8
+  baseArmor: 2
+  baseDamage: 5
+  baseGold: 10
+  baseExperienceValue: 20
+  level: 5
+  enemyTraits: 0
   dropItems:
   - item: {fileID: 11400000, guid: cf84490f2d7438a4890424d59b8391fa, type: 2}
-    minQuantity: 3
-    maxQuantity: 10
-    itemDropChance: 0.7
-  - item: {fileID: 11400000, guid: 832881b28d7a034459948138ba915e31, type: 2}
     minQuantity: 1
-    maxQuantity: 1
-    itemDropChance: 0.7
+    maxQuantity: 3
+    itemDropChance: 0.4
