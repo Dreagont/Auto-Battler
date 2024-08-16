@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -33,13 +34,19 @@ public class InventoryUIController : MonoBehaviour
         { 
             if (Keyboard.current.escapeKey.wasPressedThisFrame || Keyboard.current.xKey.wasPressedThisFrame)
             {
-                inventoryPanelOuter.gameObject.SetActive(false);
+                CloseInventory();
             }
         } 
 
        
 
     }
+
+    public void CloseInventory()
+    {
+        inventoryPanelOuter.gameObject.SetActive(false);
+    }
+
     private void OpenChest()
     {
         if (inventoryPanelOuter.gameObject.activeInHierarchy)

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Rendering;
 using UnityEngine;
 
 public class ActionsManager : MonoBehaviour
@@ -10,11 +11,18 @@ public class ActionsManager : MonoBehaviour
 
     public GlobalResourceManager globalResourceManager;
 
+    public Camera MainCamera;
+    public Camera Camera1;
+    private bool isCamera1Active = false;
+
+
     public GameObject TimePanel;
 
     private void Start()
     {
         TimePanel.SetActive(false);
+        MainCamera.gameObject.SetActive(true);
+        Camera1.gameObject.SetActive(false);
     }
 
     void Update()
@@ -62,5 +70,13 @@ public class ActionsManager : MonoBehaviour
     public void ResetTime()
     {
         Time.timeScale = 1f;
+    }
+
+    public void SwitchCamera()
+    {
+        isCamera1Active = !isCamera1Active;
+
+        MainCamera.gameObject.SetActive(isCamera1Active);
+        Camera1.gameObject.SetActive(!isCamera1Active);
     }
 } 

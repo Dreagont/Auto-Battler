@@ -76,15 +76,20 @@ public class StaticInventoryDisplay : InventoryDisplay
         GearAttackDamage = 0;
         GearAttackSpeed = 0;
         GearRegenAmount = 0;
+
         for (int i = 0; i < inventoryToDisplay.InventorySize; i++)
         {
-            if (inventoryToDisplay.InventorySlots[i].ItemData != null)
+            var slot = inventoryToDisplay.InventorySlots[i];
+            if (slot.ItemData != null)
             {
-                GearMaxhealth += inventoryToDisplay.InventorySlots[i].ItemData.bonusHealth;
-                GearArmor += inventoryToDisplay.InventorySlots[i].ItemData.bonusArmor;
-                GearAttackDamage += inventoryToDisplay.InventorySlots[i].ItemData.bonusDamage;
-                GearAttackSpeed += inventoryToDisplay.InventorySlots[i].ItemData.bonusAttackSpeed;
-                GearRegenAmount += inventoryToDisplay.InventorySlots[i].ItemData.bonusRegen;
+                int quantity = slot.StackSize;
+                float stackMultiplier = 1 + (0.05f * (quantity - 1)); 
+
+                GearMaxhealth += slot.ItemData.bonusHealth * stackMultiplier;
+                GearArmor += slot.ItemData.bonusArmor * stackMultiplier;
+                GearAttackDamage += slot.ItemData.bonusDamage * stackMultiplier;
+                GearAttackSpeed += slot.ItemData.bonusAttackSpeed * stackMultiplier;
+                GearRegenAmount += slot.ItemData.bonusRegen * stackMultiplier;
             }
         }
     }

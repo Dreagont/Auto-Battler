@@ -158,20 +158,23 @@ public class Character : MonoBehaviour
         health -= amount;
         healthBar.UpdateBar(health, baseMaxHealth);
 
-        GameObject damageTextInstance = Instantiate(damageText);
-        RectTransform textTransform = damageTextInstance.GetComponent<RectTransform>();
-        textTransform.position = Camera.main.WorldToScreenPoint(transform.position) + new Vector3(0, increase, 0);
+        if (Camera.main != null)
+        {
+            GameObject damageTextInstance = Instantiate(damageText);
+            RectTransform textTransform = damageTextInstance.GetComponent<RectTransform>();
+            textTransform.position = Camera.main.WorldToScreenPoint(transform.position) + new Vector3(0, increase, 0);
 
-        TMP_Text damageTextComponent = damageTextInstance.GetComponent<TMP_Text>();
-        if (damageTextComponent != null)
-        {
-            damageTextComponent.text = ReuseMethod.FormatNumber(amount);
+            TMP_Text damageTextComponent = damageTextInstance.GetComponent<TMP_Text>();
+            if (damageTextComponent != null)
+            {
+                damageTextComponent.text = ReuseMethod.FormatNumber(amount);
+            }
+            else
+            {
+                Debug.LogError("TMP_Text component not found on damage text prefab");
+            }
+            textTransform.SetParent(canvas.transform);
         }
-        else
-        {
-            Debug.LogError("TMP_Text component not found on damage text prefab");
-        }
-        textTransform.SetParent(canvas.transform);
 
         if (health <= 0f)
         {

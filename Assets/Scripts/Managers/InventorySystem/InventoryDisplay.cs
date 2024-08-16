@@ -11,6 +11,8 @@ public abstract class InventoryDisplay : MonoBehaviour
     public InventorySystem InventorySystem => inventorySystem;
     protected Dictionary<InventorySlotUi, InventorySlots> SlotDictionary => slotDictionary;
 
+    private StaticInventoryDisplay staticInventoryDisplay;
+
     public abstract void AssignSlot(InventorySystem inventoryToDisplay);
 
     protected virtual void UpdateSlot(InventorySlots updatedSlot)
@@ -38,6 +40,7 @@ public abstract class InventoryDisplay : MonoBehaviour
 
     protected virtual void Start()
     {
+        staticInventoryDisplay = FindObjectOfType<StaticInventoryDisplay>();
     }
 
     public void SlotClicked(InventorySlotUi slot)
@@ -71,6 +74,7 @@ public abstract class InventoryDisplay : MonoBehaviour
                 slot.AssignedInventorySlot.AddToStack(mouseInventoryItem.AsssignedInventorySlot.StackSize);
                 slot.UpdateInventorySlot();
                 mouseInventoryItem.ClearSlot();
+                staticInventoryDisplay.GetGearStats(staticInventoryDisplay.inventorySystem);
             }
             else if (isSameItem && !slot.AssignedInventorySlot.RoomLeftInStack(mouseInventoryItem.AsssignedInventorySlot.StackSize, out int leftInStack))
             {

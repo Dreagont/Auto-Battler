@@ -105,21 +105,26 @@ public class Enemy : MonoBehaviour
         health -= amount;
         healthBar.UpdateBar(health, maxHealth);
 
-        GameObject damageTextInstance = Instantiate(damageText);
-        RectTransform textTransform = damageTextInstance.GetComponent<RectTransform>();
-        textTransform.position = Camera.main.WorldToScreenPoint(transform.position) + new Vector3(0, increase, 0);
-
-        TMP_Text damageTextComponent = damageTextInstance.GetComponent<TMP_Text>();
-        if (damageTextComponent != null)
+        if (Camera.main != null)
         {
-            damageTextComponent.text = ReuseMethod.FormatNumber(amount);
-        }
-        else
-        {
-            Debug.LogError("TMP_Text component not found on damage text prefab");
+            GameObject damageTextInstance = Instantiate(damageText);
+            RectTransform textTransform = damageTextInstance.GetComponent<RectTransform>();
+            textTransform.position = Camera.main.WorldToScreenPoint(transform.position) + new Vector3(0, increase, 0);
+
+            TMP_Text damageTextComponent = damageTextInstance.GetComponent<TMP_Text>();
+            if (damageTextComponent != null)
+            {
+                damageTextComponent.text = ReuseMethod.FormatNumber(amount);
+            }
+            else
+            {
+                Debug.LogError("TMP_Text component not found on damage text prefab");
+            }
+
+            textTransform.SetParent(canvas.transform);
         }
 
-        textTransform.SetParent(canvas.transform);
+        
         if (health <= 0f)
         {
             DropItems();
