@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,10 +17,13 @@ public class PlayerInventoryHolder : InventoryHolder
 
     public InventorySlotUi[] SlotUi;
 
+    private GlobalResourceManager globalResourceManager;
+    private EnemySpawner enemySpawner;
+    
     protected override void Awake()
     {
         base.Awake();
-        SaveLoad.OnLoadGame += LoadInventory;
+        SaveLoad.OnLoadGame += LoadAll;
         secondaryInventorySystem = new InventorySystem(secondayInventorySize);
 
         // Ensure data is initialized
@@ -30,6 +34,36 @@ public class PlayerInventoryHolder : InventoryHolder
 
         SaveGameManager.data.playerInventory = new InventorySaveData(primaryInventorySystem);
         SaveGameManager.data.playerEquipment = new InventorySaveData(secondaryInventorySystem);
+
+        InitPlayerStatsSave();
+    }
+    private void Start()
+    {
+        if (chestImage != null)
+        {
+            chestImage.GetComponent<Button>().onClick.AddListener(OpenChest);
+        }
+
+        globalResourceManager = FindObjectOfType<GlobalResourceManager>();
+        enemySpawner = FindObjectOfType<EnemySpawner>();
+    }
+
+    void Update()
+    {
+        if (Keyboard.current.lKey.wasPressedThisFrame)
+        {
+            OpenChest();
+        }
+        InitPlayerStatsSave();
+    }
+
+
+    private void LoadAll(SaveData data)
+    {
+        LoadInventory(data);
+        LoadPlayerStats(data);
+        globalResourceManager.LoadResourceData(data);
+        enemySpawner.LoadSpawnerData(data);
     }
 
     private void LoadInventory(SaveData data)
@@ -42,6 +76,24 @@ public class PlayerInventoryHolder : InventoryHolder
             this.primaryInventorySystem = data.playerInventory.InventorySystem;
             this.secondaryInventorySystem = data.playerEquipment.InventorySystem;
         }
+    }
+
+    private void LoadPlayerStats(SaveData data)
+    {
+        Character character = GetComponent<Character>();
+        character.baseMaxHealth = data.playerBaseMaxHealth;
+        character.health = data.playerHealth;
+        character.baseAttackSpeed = data.playerBaseAttackSpeed;
+        character.baseAttackDamage = data.playerBaseAttackDamage;
+        character.baseArmor = data.playerBaseArmor;
+        character.baseRegenAmount = data.playerBaseRegenAmount;
+
+        character.level = data.playerLevel;
+        character.experience = data.playerExperience;
+        character.baseExperienceToNextLevel = data.playerBaseExperienceToNextLevel;
+
+        character.healthBar.UpdateBar(character.health, character.baseMaxHealth);
+        character.EXPBar.UpdateBar(character.experience, character.baseExperienceToNextLevel);
     }
 
     private void ClearInventory(InventorySystem inventory)
@@ -61,20 +113,18 @@ public class PlayerInventoryHolder : InventoryHolder
 
     }
 
-    private void Start()
-    {
-        if (chestImage != null)
-        {
-            chestImage.GetComponent<Button>().onClick.AddListener(OpenChest);
-        }
-    }
+    private void InitPlayerStatsSave()
+    { 
+        SaveGameManager.data.playerBaseMaxHealth = GetComponent<Character>().baseMaxHealth;
+        SaveGameManager.data.playerHealth = GetComponent<Character>().health;
+        SaveGameManager.data.playerBaseAttackSpeed = GetComponent<Character>().baseAttackSpeed;
+        SaveGameManager.data.playerBaseAttackDamage = GetComponent<Character>().baseAttackDamage;
+        SaveGameManager.data.playerBaseArmor = GetComponent<Character>().baseArmor;
+        SaveGameManager.data.playerBaseRegenAmount = GetComponent<Character>().baseRegenAmount;
 
-    void Update()
-    {
-        if (Keyboard.current.lKey.wasPressedThisFrame)
-        {
-            OpenChest();
-        }
+        SaveGameManager.data.playerLevel = GetComponent<Character>().level;
+        SaveGameManager.data.playerExperience = GetComponent<Character>().experience;
+        SaveGameManager.data.playerBaseExperienceToNextLevel = GetComponent<Character>().baseExperienceToNextLevel;
     }
 
     public void OpenChest()

@@ -20,4 +20,11 @@ public static class ReuseMethod
         }
     }
 
+    public static string FormatTime(float timeInSeconds)
+    {
+        int minutes = (int)(timeInSeconds / 60);
+        int seconds = (int)(timeInSeconds % 60);
+        return string.Format("{0:00}:{1:00}", minutes, seconds);
+    }
+
 }

@@ -28,8 +28,44 @@ public class EnemySpawner : MonoBehaviour
             Debug.LogError("Character not found in the scene.");
             return;
         }
+        SaveSpawnerData();
         SpawnEnemy();
     }
+
+    void Update()
+    {
+        if (character != null && character.IsDead())
+        {
+            StopSpawningAndKillCurrentEnemy();
+            enemiesKilledToSpawnTrait = 0;
+        }
+
+        if (stopSpawning && character != null && character.IsHealthFull())
+        {
+            CheckPlayerHealthAndResumeSpawning();
+        }
+
+        SaveSpawnerData();
+    }
+
+    public void SaveSpawnerData()
+    {
+        SaveGameManager.data.spawnerEnemyLevel = enemyLevel;
+        SaveGameManager.data.spawnerEnemiesKilledToLevel = enemiesKilledToLevel;
+        SaveGameManager.data.spawnerEnemiesKilledToSpawnTrait = enemiesKilledToSpawnTrait;
+        SaveGameManager.data.spawnerCurrentSpawnIndex = currentSpawnIndex;
+        SaveGameManager.data.spawnerStopSpawning = stopSpawning;
+    }
+
+    public void LoadSpawnerData(SaveData data)
+    {
+        enemyLevel = data.spawnerEnemyLevel;
+        enemiesKilledToLevel = data.spawnerEnemiesKilledToLevel;
+        enemiesKilledToSpawnTrait = data.spawnerEnemiesKilledToSpawnTrait;
+        currentSpawnIndex = data.spawnerCurrentSpawnIndex;
+        stopSpawning = data.spawnerStopSpawning;
+    }
+
 
     void SpawnEnemy()
     {
@@ -118,17 +154,4 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-    void Update()
-    {
-        if (character != null && character.IsDead())
-        {
-            StopSpawningAndKillCurrentEnemy();
-            enemiesKilledToSpawnTrait = 0;
-        }
-
-        if (stopSpawning && character != null && character.IsHealthFull())
-        {
-            CheckPlayerHealthAndResumeSpawning();
-        }
-    }
 }

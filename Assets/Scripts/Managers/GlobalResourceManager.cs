@@ -20,10 +20,51 @@ public class GlobalResourceManager : MonoBehaviour
     public TMP_Text MaxExchangeAbleEnergyText;
     public TMP_Text MaxUseAbleEnergyText;
 
+    private float elapsedTime = 0f;
+    public TMP_Text timerText;
+
     private float Cooldown = 0f;
 
     public BarManager UseBar;
     public BarManager ExchangBar;
+
+    private void Start()
+    {
+        SaveResourceData();
+    }
+
+    public void SaveResourceData()
+    {
+        SaveGameManager.data.gold = Gold;
+        SaveGameManager.data.exchangeableEnergy = ExchangeAbleEnergy;
+        SaveGameManager.data.usableEnergy = UseAbleEnergy;
+        SaveGameManager.data.maxExchangeableEnergy = MaxExchangeAbleEnergy;
+        SaveGameManager.data.maxUsableEnergy = MaxUseAbleEnergy;
+        SaveGameManager.data.elapsedTime = elapsedTime;
+    }
+
+    public void LoadResourceData(SaveData data)
+    {
+        Gold = data.gold;
+        ExchangeAbleEnergy = data.exchangeableEnergy;
+        UseAbleEnergy = data.usableEnergy;
+        MaxExchangeAbleEnergy = data.maxExchangeableEnergy;
+        MaxUseAbleEnergy = data.maxUsableEnergy;
+        elapsedTime = data.elapsedTime;
+
+        UpdateUI();
+    }
+
+    private void UpdateUI()
+    {
+        GoldText.text = ReuseMethod.FormatNumber(Gold);
+        ExchangeAbleEnergyText.text = ReuseMethod.FormatNumber(ExchangeAbleEnergy);
+        UseAbleEnergyText.text = ReuseMethod.FormatNumber(UseAbleEnergy);
+        MaxExchangeAbleEnergyText.text = ReuseMethod.FormatNumber(MaxExchangeAbleEnergy);
+        MaxUseAbleEnergyText.text = ReuseMethod.FormatNumber(MaxUseAbleEnergy);
+        UseBar.UpdateBar(UseAbleEnergy, MaxUseAbleEnergy);
+        ExchangBar.UpdateBar(ExchangeAbleEnergy, MaxExchangeAbleEnergy);
+    }
 
     private void Update()
     {
@@ -36,6 +77,14 @@ public class GlobalResourceManager : MonoBehaviour
         MaxExchangeAbleEnergyText.text = ReuseMethod.FormatNumber(MaxExchangeAbleEnergy);
         MaxUseAbleEnergyText.text = ReuseMethod.FormatNumber(MaxUseAbleEnergy);
 
+        SaveResourceData();
+
+        elapsedTime += Time.deltaTime;
+
+        if (timerText != null)
+        {
+            timerText.text = ReuseMethod.FormatTime(elapsedTime);
+        }
 
         if (UseAbleEnergy > MaxUseAbleEnergy)
         {
