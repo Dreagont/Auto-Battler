@@ -102,6 +102,7 @@ public class OrcData : EnemyTypeData
         baseExperienceValue = 25f;
         level = 1;
         enemyTraits = EnemyTraits.Normal;
+        dropItems = new List<ItemDrop>();
     }
 }
 

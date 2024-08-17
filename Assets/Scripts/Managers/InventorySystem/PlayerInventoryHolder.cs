@@ -80,7 +80,7 @@ public class PlayerInventoryHolder : InventoryHolder
 
     private void LoadPlayerStats(SaveData data)
     {
-        Character character = GetComponent<Character>();
+        Fighter character = GetComponent<Fighter>();
         character.baseMaxHealth = data.playerBaseMaxHealth;
         character.health = data.playerHealth;
         character.baseAttackSpeed = data.playerBaseAttackSpeed;
@@ -115,16 +115,16 @@ public class PlayerInventoryHolder : InventoryHolder
 
     private void InitPlayerStatsSave()
     { 
-        SaveGameManager.data.playerBaseMaxHealth = GetComponent<Character>().baseMaxHealth;
-        SaveGameManager.data.playerHealth = GetComponent<Character>().health;
-        SaveGameManager.data.playerBaseAttackSpeed = GetComponent<Character>().baseAttackSpeed;
-        SaveGameManager.data.playerBaseAttackDamage = GetComponent<Character>().baseAttackDamage;
-        SaveGameManager.data.playerBaseArmor = GetComponent<Character>().baseArmor;
-        SaveGameManager.data.playerBaseRegenAmount = GetComponent<Character>().baseRegenAmount;
+        SaveGameManager.data.playerBaseMaxHealth = GetComponent<Fighter>().baseMaxHealth;
+        SaveGameManager.data.playerHealth = GetComponent<Fighter>().health;
+        SaveGameManager.data.playerBaseAttackSpeed = GetComponent<Fighter>().baseAttackSpeed;
+        SaveGameManager.data.playerBaseAttackDamage = GetComponent<Fighter>().baseAttackDamage;
+        SaveGameManager.data.playerBaseArmor = GetComponent<Fighter>().baseArmor;
+        SaveGameManager.data.playerBaseRegenAmount = GetComponent<Fighter>().baseRegenAmount;
 
-        SaveGameManager.data.playerLevel = GetComponent<Character>().level;
-        SaveGameManager.data.playerExperience = GetComponent<Character>().experience;
-        SaveGameManager.data.playerBaseExperienceToNextLevel = GetComponent<Character>().baseExperienceToNextLevel;
+        SaveGameManager.data.playerLevel = GetComponent<Fighter>().level;
+        SaveGameManager.data.playerExperience = GetComponent<Fighter>().experience;
+        SaveGameManager.data.playerBaseExperienceToNextLevel = GetComponent<Fighter>().baseExperienceToNextLevel;
     }
 
     public void OpenChest()

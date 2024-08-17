@@ -11,7 +11,7 @@ public class Enemy : MonoBehaviour
     public float damage;
 
     private float attackCooldown = 0f;
-    private Character character;
+    private Fighter character;
     public BarManager healthBar;
     public GameObject damageText;
     public TMP_Text popupText;
@@ -31,7 +31,7 @@ public class Enemy : MonoBehaviour
         InitializeEnemy();
         EnemyTraits = enemyTypeData.enemyTraits;
         healthBar.UpdateBar(health, maxHealth);
-        character = FindObjectOfType<Character>();
+        character = FindObjectOfType<Fighter>();
         spawner = FindObjectOfType<EnemySpawner>();
         actionsManager = FindObjectOfType<ActionsManager>();
         if (canvas == null)

@@ -1,128 +1,132 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    public GameObject[] enemyPrefabs;
-    public Transform[] spawnPoints;
-    private int currentSpawnIndex = 0;
-    private Character character;
-    public float spawnDelay = 1f;
+    public SpawnerStats spawnerStats; 
 
-    public int enemiesKilledToLevel = 0;
-    public int enemiesKilledToSpawnTrait = 0;
-    private int enemyLevel = 1;
+    private int currentSpawnIndex = 0;
+    private Fighter character;
     private Enemy currentEnemy;
     private bool stopSpawning = false;
+    public Transform[] spawnPoints;
 
-    public int levelUpCount = 10;
-    public int countToElite = 5;
-    public int countToBoss = 20;
-    public int countToChapterBoss = 50;
-
+    private int _enemyLevel = 1;
+    private int enemiesKilledToLevel = 0;
     void Start()
     {
-        character = FindObjectOfType<Character>();
+        if (spawnerStats == null)
+        {
+            Debug.LogError("SpawnerStats not assigned.");
+            return;
+        }
+
+        character = FindObjectOfType<Fighter>();
         if (character == null)
         {
             Debug.LogError("Character not found in the scene.");
             return;
         }
+
         SaveSpawnerData();
-        SpawnEnemy();
+        StartCoroutine(SpawnEnemyAfterDelay());
     }
 
     void Update()
     {
-        if (character != null && character.IsDead())
+        if (character != null)
         {
-            StopSpawningAndKillCurrentEnemy();
-            enemiesKilledToSpawnTrait = 0;
-        }
+            if (character.IsDead())
+            {
+                StopSpawningAndKillCurrentEnemy();
+            }
 
-        if (stopSpawning && character != null && character.IsHealthFull())
-        {
-            CheckPlayerHealthAndResumeSpawning();
+            if (stopSpawning && character.IsHealthFull())
+            {
+                CheckPlayerHealthAndResumeSpawning();
+            }
         }
-
-        SaveSpawnerData();
     }
-
     public void SaveSpawnerData()
     {
-        SaveGameManager.data.spawnerEnemyLevel = enemyLevel;
-        SaveGameManager.data.spawnerEnemiesKilledToLevel = enemiesKilledToLevel;
-        SaveGameManager.data.spawnerEnemiesKilledToSpawnTrait = enemiesKilledToSpawnTrait;
+        SaveGameManager.data.spawnerEnemyLevel = _enemyLevel;
+        SaveGameManager.data.spawnerEnemiesKilledToLevel = spawnerStats.levelUpCount;
+        SaveGameManager.data.eliteSpawnRate = spawnerStats.eliteSpawnRate;
+        SaveGameManager.data.bossSpawnRate = spawnerStats.bossSpawnRate;
         SaveGameManager.data.spawnerCurrentSpawnIndex = currentSpawnIndex;
         SaveGameManager.data.spawnerStopSpawning = stopSpawning;
     }
-
     public void LoadSpawnerData(SaveData data)
     {
-        enemyLevel = data.spawnerEnemyLevel;
-        enemiesKilledToLevel = data.spawnerEnemiesKilledToLevel;
-        enemiesKilledToSpawnTrait = data.spawnerEnemiesKilledToSpawnTrait;
+        _enemyLevel = data.spawnerEnemyLevel;
+        spawnerStats.levelUpCount = data.spawnerEnemiesKilledToLevel;
+        spawnerStats.eliteSpawnRate = data.eliteSpawnRate;
+        spawnerStats.bossSpawnRate = data.bossSpawnRate;
         currentSpawnIndex = data.spawnerCurrentSpawnIndex;
         stopSpawning = data.spawnerStopSpawning;
     }
-
 
     void SpawnEnemy()
     {
         if (stopSpawning) return;
 
-        if (spawnPoints.Length == 0)
+        if (spawnerStats.enemyPrefabs.Length == 0 || spawnPoints.Length == 0)
         {
-            Debug.LogError("No spawn points set for EnemySpawner.");
+            Debug.LogError("No enemy prefabs or spawn points set.");
             return;
         }
 
         Transform spawnPoint = spawnPoints[currentSpawnIndex];
-        int randomEnemyIndex = Random.Range(0, enemyPrefabs.Length);
-        GameObject enemyObj = Instantiate(enemyPrefabs[randomEnemyIndex], spawnPoint.position, spawnPoint.rotation);
+        int randomEnemyIndex = Random.Range(0, spawnerStats.enemyPrefabs.Length);
+
+        GameObject enemyObj = Instantiate(spawnerStats.enemyPrefabs[randomEnemyIndex], spawnPoint.position, spawnPoint.rotation);
         currentEnemy = enemyObj.GetComponent<Enemy>();
-        currentEnemy.enemyTypeData.level = enemyLevel;
+
+        currentEnemy.enemyTypeData.level = _enemyLevel;
         currentEnemy.enemyTypeData.enemyTraits = EnemyTraits.Normal;
 
         if (currentEnemy != null)
         {
+            currentEnemy.enemyTypeData.level = spawnerStats.enemyLevel;
+            currentEnemy.enemyTypeData.enemyTraits = DetermineEnemyTrait();
+            currentEnemy.SetLevel(_enemyLevel);
+
             if (character != null)
             {
                 character.AddEnemy(currentEnemy);
-            }
-            currentEnemy.SetLevel(enemyLevel);
-
-            if (enemiesKilledToSpawnTrait == countToChapterBoss)
-            {
-                currentEnemy.SetTrait(EnemyTraits.ChapterBoss);
-                enemiesKilledToSpawnTrait = 0;
-            }
-            else if (enemiesKilledToSpawnTrait == countToBoss)
-            {
-                currentEnemy.SetTrait(EnemyTraits.Boss);
-            }
-            else if (enemiesKilledToSpawnTrait == countToElite)
-            {
-                currentEnemy.SetTrait(EnemyTraits.Elite);
-            }
-            else
-            {
-                currentEnemy.SetTrait(EnemyTraits.Normal);
             }
         }
 
         currentSpawnIndex = (currentSpawnIndex + 1) % spawnPoints.Length;
     }
 
+    private EnemyTraits DetermineEnemyTrait()
+    {
+        float spawnChance = Random.value;
+
+        if (spawnChance <= spawnerStats.bossSpawnRate)
+        {
+            return EnemyTraits.Boss;
+        }
+        else if (spawnChance <= spawnerStats.eliteSpawnRate)
+        {
+            return EnemyTraits.Elite;
+        }
+        else
+        {
+            return EnemyTraits.Normal;
+        }
+    }
+
     public void OnEnemyKilled()
     {
         enemiesKilledToLevel++;
-        enemiesKilledToSpawnTrait++;
 
-        if (enemiesKilledToLevel >= levelUpCount)
+        if (enemiesKilledToLevel >=spawnerStats.levelUpCount)
         {
-            enemyLevel++;
-            enemiesKilledToLevel = 0; 
+            _enemyLevel++;
+            enemiesKilledToLevel = 0;
         }
 
         StartCoroutine(SpawnEnemyAfterDelay());
@@ -130,7 +134,7 @@ public class EnemySpawner : MonoBehaviour
 
     IEnumerator SpawnEnemyAfterDelay()
     {
-        yield return new WaitForSeconds(spawnDelay);
+        yield return new WaitForSeconds(spawnerStats.spawnDelay);
         SpawnEnemy();
     }
 
@@ -150,8 +154,13 @@ public class EnemySpawner : MonoBehaviour
         if (character != null && character.IsHealthFull())
         {
             stopSpawning = false;
-            SpawnEnemy(); 
+            SpawnEnemy();
         }
     }
 
+    public void ResumeSpawning()
+    {
+        stopSpawning = false;
+        SpawnEnemy();
+    }
 }

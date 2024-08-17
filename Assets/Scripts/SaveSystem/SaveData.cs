@@ -34,7 +34,8 @@ public class SaveData
     //EnemySpawner
     public int spawnerEnemyLevel;
     public int spawnerEnemiesKilledToLevel;
-    public int spawnerEnemiesKilledToSpawnTrait;
+    public float eliteSpawnRate;
+    public float bossSpawnRate; 
     public int spawnerCurrentSpawnIndex;
     public bool spawnerStopSpawning;
 
