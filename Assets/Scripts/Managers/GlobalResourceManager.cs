@@ -16,8 +16,6 @@ public class GlobalResourceManager : MonoBehaviour
     public int MaxWoods = 100;
     public int MaxOres = 100;
 
-    public int ExchangeAmount = 10;
-
     public TMP_Text GoldText;
     public TMP_Text ExchangeAbleEnergyText;
     public TMP_Text UseAbleEnergyText;
@@ -36,6 +34,7 @@ public class GlobalResourceManager : MonoBehaviour
 
     public Lumberjack Lumberjack;
     public Miner Miner;
+    public Cooker Cooker; 
     private void Start()
     {
         SaveResourceData();
@@ -135,39 +134,10 @@ public class GlobalResourceManager : MonoBehaviour
     {
         Lumberjack.ChopWood();
         Miner.MineOre();
-        ExchangeEnergy(0, 1);
+        Cooker.ExchangeEnergy(0);
     }
 
 
-    public void ExchangeEnergy(int bonusAmount, float bonusRate)
-    {
-        if (ExchangeAbleEnergy <= 0)
-        {
-            ExchangeAbleEnergy = 0;
-        } else
-        {
-            if (UseAbleEnergy < MaxUseAbleEnergy)
-            {
-                int SumAmount = ExchangeAmount + bonusAmount;
-                int temp = (int)(SumAmount * bonusRate);
-                Cooldown -= Time.deltaTime;
-                if (Cooldown <= 0f)
-                {
-                    if (temp <= ExchangeAbleEnergy)
-                    {
-                        ExchangeAbleEnergy = ExchangeAbleEnergy - temp;
-                        UseAbleEnergy = UseAbleEnergy + temp;
-                    }
-                    else
-                    {
-                        temp = ExchangeAbleEnergy;
-                        ExchangeAbleEnergy = ExchangeAbleEnergy - temp;
-                        UseAbleEnergy = UseAbleEnergy + temp;
-                    }
-                    Cooldown = 1f;
-                }
-            }
-        }
-    }
+    
 
 }

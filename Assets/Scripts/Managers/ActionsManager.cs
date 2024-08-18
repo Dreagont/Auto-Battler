@@ -17,6 +17,7 @@ public class ActionsManager : MonoBehaviour
 
 
     public GameObject TimePanel;
+    public GameObject BarsPanel;
 
     private void Start()
     {
@@ -60,6 +61,11 @@ public class ActionsManager : MonoBehaviour
         {
             TimePanel.SetActive(true);
         }
+    }
+
+    public void ToggleBars()
+    {
+        BarsPanel.gameObject.SetActive(!BarsPanel.gameObject.activeInHierarchy);
     }
 
     public void SpeedUpTime(float multiplier)
