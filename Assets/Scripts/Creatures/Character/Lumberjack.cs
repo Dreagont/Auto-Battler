@@ -34,18 +34,21 @@ public class Lumberjack : MonoBehaviour
     
     public void ChopWood()
     {
-        Cooldown -= Time.deltaTime;
-        if (Cooldown <= 0f)
+        if (GlobalResourceManager.Woods < GlobalResourceManager.MaxWoods)
         {
-            if (GlobalResourceManager.UseAbleEnergy >= currentMap.lumberArenaHarvestBonus.EnergyCost)
+            Cooldown -= Time.deltaTime;
+            if (Cooldown <= 0f)
             {
-                GlobalResourceManager.Woods += ChoppingQuality + currentMap.lumberArenaHarvestBonus.arenaQualityBonus;
-                GlobalResourceManager.UseAbleEnergy -= currentMap.lumberArenaHarvestBonus.EnergyCost;
-                Cooldown = 1f / (ChoppingSpeed + currentMap.lumberArenaHarvestBonus.arenaSpeedBonus);
-                GainExperience(ChoppingQuality + currentMap.lumberArenaHarvestBonus.arenaQualityBonus);
+                if (GlobalResourceManager.UseAbleEnergy >= currentMap.lumberArenaHarvestBonus.EnergyCost)
+                {
+                    GlobalResourceManager.Woods += ChoppingQuality + currentMap.lumberArenaHarvestBonus.arenaQualityBonus;
+                    GlobalResourceManager.UseAbleEnergy -= currentMap.lumberArenaHarvestBonus.EnergyCost;
+                    Cooldown = 1f / (ChoppingSpeed + currentMap.lumberArenaHarvestBonus.arenaSpeedBonus);
+                    GainExperience(ChoppingQuality + currentMap.lumberArenaHarvestBonus.arenaQualityBonus);
 
+                }
             }
-        }
+        } 
     }
 
     private void CheckLevelUp()

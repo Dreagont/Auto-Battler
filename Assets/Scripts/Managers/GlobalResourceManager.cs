@@ -27,14 +27,14 @@ public class GlobalResourceManager : MonoBehaviour
     private float elapsedTime = 0f;
     public TMP_Text timerText;
 
-    private float Cooldown = 0f;
+    //private float Cooldown = 0f;
 
     public BarManager UseBar;
     public BarManager ExchangBar;
 
     public Lumberjack Lumberjack;
     public Miner Miner;
-    public Cooker Cooker; 
+    public Farmer Farmer; 
     private void Start()
     {
         SaveResourceData();
@@ -56,6 +56,11 @@ public class GlobalResourceManager : MonoBehaviour
         Limmiter(ref Ores, MaxOres);
 
         GainResource();
+    }
+
+    public void ReCalculateMaxValue()
+    {
+
     }
 
     public void SaveResourceData()
@@ -134,10 +139,51 @@ public class GlobalResourceManager : MonoBehaviour
     {
         Lumberjack.ChopWood();
         Miner.MineOre();
-        Cooker.ExchangeEnergy(0);
+        Farmer.ExchangeEnergy(0);
     }
 
+    public int BuilderHouseLevel = 1;
 
-    
+    public void IncreaseMaxValue(ResourceType resourceType, int amount)
+    {
+        switch (resourceType)
+        {
+            case ResourceType.Wood:
+                MaxWoods += amount;
+                break;
+            case ResourceType.Energy:
+                MaxUseAbleEnergy += amount;
+                break;
+        }
+    }
+
+    public int GetResource(ResourceType resourceType)
+    {
+        switch (resourceType)
+        {
+            case ResourceType.Wood:
+                return Woods;
+            case ResourceType.Energy:
+                return UseAbleEnergy;
+            // Add cases for other resources as needed
+            default:
+                return 0;
+        }
+    }
+
+    public void DeductResource(ResourceType resourceType, int amount)
+    {
+        switch (resourceType)
+        {
+            case ResourceType.Wood:
+                Woods -= amount;
+                break;
+            case ResourceType.Energy:
+                UseAbleEnergy -= amount;
+                break;
+                // Add cases for other resources as needed
+        }
+    }
+
 
 }

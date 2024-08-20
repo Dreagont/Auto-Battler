@@ -35,17 +35,21 @@ public class Miner : MonoBehaviour
 
     public void MineOre()
     {
-        Cooldown -= Time.deltaTime;
-        if (Cooldown <= 0f)
+        if (GlobalResourceManager.Ores < GlobalResourceManager.MaxOres)
         {
-            if (GlobalResourceManager.UseAbleEnergy >= currentMap.minerArenaHarvestBonus.EnergyCost)
+            Cooldown -= Time.deltaTime;
+            if (Cooldown <= 0f)
             {
-                GlobalResourceManager.Ores += MiningQuality + currentMap.minerArenaHarvestBonus.arenaQualityBonus;
-                GlobalResourceManager.UseAbleEnergy -= currentMap.minerArenaHarvestBonus.EnergyCost;
-                Cooldown = 1f / (MiningSpeed + currentMap.minerArenaHarvestBonus.arenaSpeedBonus);
-                GainExperience(MiningQuality + currentMap.minerArenaHarvestBonus.arenaQualityBonus);
+                if (GlobalResourceManager.UseAbleEnergy >= currentMap.minerArenaHarvestBonus.EnergyCost)
+                {
+                    GlobalResourceManager.Ores += MiningQuality + currentMap.minerArenaHarvestBonus.arenaQualityBonus;
+                    GlobalResourceManager.UseAbleEnergy -= currentMap.minerArenaHarvestBonus.EnergyCost;
+                    Cooldown = 1f / (MiningSpeed + currentMap.minerArenaHarvestBonus.arenaSpeedBonus);
+                    GainExperience(MiningQuality + currentMap.minerArenaHarvestBonus.arenaQualityBonus);
+                }
             }
         }
+           
     }
 
     private void CheckLevelUp()

@@ -13,7 +13,7 @@ public class ActionsManager : MonoBehaviour
 
     public Camera MainCamera;
     public Camera Camera1;
-    private bool isCamera1Active = false;
+    private bool isCamera1Active = true;
 
 
     public GameObject TimePanel;
@@ -80,9 +80,17 @@ public class ActionsManager : MonoBehaviour
 
     public void SwitchCamera()
     {
-        isCamera1Active = !isCamera1Active;
+        if (isCamera1Active)
+        {
+            MainCamera.gameObject.SetActive(false);
+            Camera1.gameObject.SetActive(true);
+            isCamera1Active = false;
+        } else
+        {
+            MainCamera.gameObject.SetActive(true);
+            Camera1.gameObject.SetActive(false);
+            isCamera1Active = true;
+        }
 
-        MainCamera.gameObject.SetActive(isCamera1Active);
-        Camera1.gameObject.SetActive(!isCamera1Active);
     }
 } 
