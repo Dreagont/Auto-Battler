@@ -13,6 +13,9 @@ public class PlayerInventoryHolder : InventoryHolder
     [SerializeField] protected InventorySystem secondaryInventorySystem;
 
     public InventorySystem SecondaryInventorySystem => secondaryInventorySystem;
+
+    
+
     public Image chestImage;
 
     public InventorySlotUi[] SlotUi;
@@ -25,7 +28,7 @@ public class PlayerInventoryHolder : InventoryHolder
         base.Awake();
         SaveLoad.OnLoadGame += LoadAll;
         secondaryInventorySystem = new InventorySystem(secondayInventorySize);
-
+        
         // Ensure data is initialized
         if (SaveGameManager.data == null)
         {

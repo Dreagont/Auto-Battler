@@ -35,11 +35,11 @@ public class ActionsManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.P))
         {
-            InventoryHolder.AddToInventory(itemData1, 1);
+            InventoryHolder.AddToInventory(itemData1, 10);
         }
         if (Input.GetKeyDown(KeyCode.O))
         {
-            InventoryHolder.AddToInventory(itemData2, 1);
+            InventoryHolder.AddToInventory(itemData2, 10);
         }
     }
     public void PickupItem(InventoryItemData itemData)

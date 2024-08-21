@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class StaticInventoryDisplay : InventoryDisplay
 {
@@ -47,13 +46,10 @@ public class StaticInventoryDisplay : InventoryDisplay
         }
     }
 
+
     private void Update()
     {
-        if (Keyboard.current.wKey.wasPressedThisFrame)
-        {
-            WhatIsThat();
-        }
-
+        
         int filledSlots = CountFilledSlots();
 
         if (filledSlots != oldfilledSlots)
@@ -61,16 +57,11 @@ public class StaticInventoryDisplay : InventoryDisplay
             oldfilledSlots = filledSlots;
             GetGearStats(inventorySystem);
         }
-    }
-
-    public void WhatIsThat()
-    {
-        Debug.Log(inventorySystem.InventorySlots[0].ItemData.displayName.ToString());
+        
     }
 
     public void GetGearStats(InventorySystem inventoryToDisplay)
     {
-        Debug.LogWarning("Gear Changed");
         GearMaxhealth = 0;
         GearArmor = 0;
         GearAttackDamage = 0;
@@ -83,7 +74,7 @@ public class StaticInventoryDisplay : InventoryDisplay
             if (slot.ItemData != null)
             {
                 int quantity = slot.StackSize;
-                float stackMultiplier = 1 + (0.05f * (quantity - 1)); 
+                float stackMultiplier = 1 + (0.05f * (quantity - 1));
 
                 GearMaxhealth += slot.ItemData.bonusHealth * stackMultiplier;
                 GearArmor += slot.ItemData.bonusArmor * stackMultiplier;
@@ -109,3 +100,5 @@ public class StaticInventoryDisplay : InventoryDisplay
         return filledSlotsCount;
     }
 }
+
+

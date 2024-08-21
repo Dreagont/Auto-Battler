@@ -28,7 +28,6 @@ public abstract class InventoryDisplay : MonoBehaviour
 
     protected virtual void UpdateSlotStatic(InventorySlots updatedSlot)
     {
-        Debug.LogWarning("Static change");
         foreach (var slot in slotDictionary)
         {
             if (slot.Value == updatedSlot)
@@ -45,11 +44,9 @@ public abstract class InventoryDisplay : MonoBehaviour
 
     public void SlotClicked(InventorySlotUi slot)
     {
-        Debug.Log("Slot Clicked");
 
         if (slot.AssignedInventorySlot.ItemData != null && mouseInventoryItem.AsssignedInventorySlot == null)
         {
-            Debug.Log("Picking up item");
             InventorySlots tempSlot = new InventorySlots(slot.AssignedInventorySlot.ItemData, slot.AssignedInventorySlot.StackSize);
             mouseInventoryItem.UpdateMouseSlot(tempSlot);
             slot.ClearSlot();
@@ -58,7 +55,6 @@ public abstract class InventoryDisplay : MonoBehaviour
         {
             if (slot.equipableTag == mouseInventoryItem.AsssignedInventorySlot.ItemData.EquipableTag || slot.equipableTag == EquipableTag.None)
             {
-                Debug.Log("Dropping item into empty slot");
                 slot.AssignedInventorySlot.AssignItem(mouseInventoryItem.AsssignedInventorySlot);
                 slot.UpdateInventorySlot();
                 mouseInventoryItem.ClearSlot();
@@ -74,6 +70,7 @@ public abstract class InventoryDisplay : MonoBehaviour
                 slot.AssignedInventorySlot.AddToStack(mouseInventoryItem.AsssignedInventorySlot.StackSize);
                 slot.UpdateInventorySlot();
                 mouseInventoryItem.ClearSlot();
+
                 staticInventoryDisplay.GetGearStats(staticInventoryDisplay.inventorySystem);
             }
             else if (isSameItem && !slot.AssignedInventorySlot.RoomLeftInStack(mouseInventoryItem.AsssignedInventorySlot.StackSize, out int leftInStack))

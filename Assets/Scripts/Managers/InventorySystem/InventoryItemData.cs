@@ -10,6 +10,7 @@ public class InventoryItemData : ScriptableObject
     public string description;
     public Sprite icon;
     public int MaxStackSize;
+    public int sellPrice = 10;
 
     public ItemType itemType1;
     public ItemType itemType2;

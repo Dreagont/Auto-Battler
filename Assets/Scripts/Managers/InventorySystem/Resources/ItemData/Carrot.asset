@@ -16,7 +16,8 @@ MonoBehaviour:
   displayName: Carrot
   description: Carrot
   icon: {fileID: -1429853927, guid: 9470b17ec078762449d7fbcec5647f51, type: 3}
-  MaxStackSize: 5
+  MaxStackSize: 9999
+  sellPrice: 10
   itemType1: 2
   itemType2: 3
   consumeStats:
