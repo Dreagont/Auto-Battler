@@ -45,12 +45,19 @@ public class InventorySlotUi : MonoBehaviour, IPointerEnterHandler, IPointerExit
             itemSprite.sprite = slot.ItemData.icon;
             itemSprite.color = Color.white;
             holder.color = Color.clear;
-            itemCount.text = slot.StackSize > 1 ? slot.StackSize.ToString() : "";
+            if (slot.StackSize == 0)
+            {
+                ClearSlot();
+            } else
+            {
+                itemCount.text = slot.StackSize > 1 ? slot.StackSize.ToString() : "";
+            }
         }
         else
         {
             ClearSlot();
         }
+
     }
 
     public void UpdateInventorySlot()

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,11 +19,12 @@ public class Farmer : MonoBehaviour
     public MapBonusManager currentMap;
     public GlobalResourceManager GlobalResourceManager;
 
-    void Start()
+    private Coroutine autoUseCoroutine;
+    public PlayerInventoryHolder InventoryHolder;
+    private void Start()
     {
-
+        StartAutoUse();
     }
-
     void Update()
     {
         CheckLevelUp();
@@ -61,7 +63,7 @@ public class Farmer : MonoBehaviour
     {
         if (GlobalResourceManager.UseAbleEnergy >= 10)
         {
-            GlobalResourceManager.UseAbleEnergy += item.consumeStats.EnergyGain * amount;
+            GlobalResourceManager.ExchangeAbleEnergy += item.consumeStats.EnergyGain * amount;
             GlobalResourceManager.UseAbleEnergy -= 10;
             GainExperience(10); 
         }
@@ -92,5 +94,64 @@ public class Farmer : MonoBehaviour
         UseAmount += 1;
 
         Debug.Log("Farmer leveled up to level " + level);
+    }
+
+    private IEnumerator AutoUseCoroutine()
+    {
+        while (true)
+        {
+            AutoUse(InventoryHolder);
+            yield return new WaitForSeconds(1f);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        StopAutoUse();
+    }
+
+
+    public void StartAutoUse()
+    {
+        if (autoUseCoroutine == null)
+        {
+            autoUseCoroutine = StartCoroutine(AutoUseCoroutine());
+        }
+    }
+
+    public void StopAutoUse()
+    {
+        if (autoUseCoroutine != null)
+        {
+            StopCoroutine(autoUseCoroutine);
+            autoUseCoroutine = null;
+        }
+    }
+
+    public void AutoUse(PlayerInventoryHolder inventoryHolder)
+    {
+        InventorySystem inventorySystem = inventoryHolder.UseInventorySystem;
+        for (int i = 0; i < inventorySystem.InventorySize; i++)
+        {
+            if (inventorySystem.InventorySlots[i].ItemData != null)
+            {
+                if (inventorySystem.InventorySlots[i].StackSize >= GetUseAmount())
+                {
+                    AutoUseItem(inventorySystem.InventorySlots[i].ItemData, GetUseAmount());
+                    inventorySystem.InventorySlots[i].RemoveFromStack(GetUseAmount());
+                }
+                else
+                {
+                    AutoUseItem(inventorySystem.InventorySlots[i].ItemData, inventorySystem.InventorySlots[i].StackSize);
+                    inventorySystem.InventorySlots[i].RemoveFromStack(inventorySystem.InventorySlots[i].StackSize);
+                }
+                break;
+            }
+        }
+    }
+
+    private int GetUseAmount()
+    {
+       return UseAmount;
     }
 }

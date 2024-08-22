@@ -8,9 +8,6 @@ public class UseInventoryDisplay : InventoryDisplay
     [SerializeField] private InventoryHolder inventoryHolder;
     [SerializeField] private InventorySlotUi[] slots;
 
-    public Farmer Farmer;
-
-    private Coroutine autoUseCoroutine;
     public override void AssignSlot(InventorySystem inventoryToDisplay)
     {
         slotDictionary = new Dictionary<InventorySlotUi, InventorySlots>();
@@ -40,65 +37,21 @@ public class UseInventoryDisplay : InventoryDisplay
         {
             Debug.LogWarning("no inventoryHolder assigned to StaticInventoryDisplay");
         }
-        StartAutoUse();
     }
 
 
     void Update()
     {
-
+        UpdateSlot();
     }
 
-    private IEnumerator AutoUseCoroutine()
-    {
-        while (true)
-        {
-            AutoUse();
-            yield return new WaitForSeconds(1f);
-        }
-    }
-
-    private void OnDestroy()
-    {
-        StopAutoUse();
-    }
-
-
-    public void StartAutoUse()
-    {
-        if (autoUseCoroutine == null)
-        {
-            autoUseCoroutine = StartCoroutine(AutoUseCoroutine());
-        }
-    }
-
-    public void StopAutoUse()
-    {
-        if (autoUseCoroutine != null)
-        {
-            StopCoroutine(autoUseCoroutine);
-            autoUseCoroutine = null;
-        }
-    }
-
-    public void AutoUse()
+    public void UpdateSlot()
     {
         for (int i = 0; i < inventorySystem.InventorySize; i++)
         {
             if (inventorySystem.InventorySlots[i].ItemData != null)
             {
-                if (inventorySystem.InventorySlots[i].StackSize >= Farmer.UseAmount)
-                {
-                    Farmer.AutoUseItem(inventorySystem.InventorySlots[i].ItemData, Farmer.UseAmount);
-                    inventorySystem.InventorySlots[i].RemoveFromStack(Farmer.UseAmount);
-                }
-                else
-                {
-                    Farmer.AutoUseItem(inventorySystem.InventorySlots[i].ItemData, inventorySystem.InventorySlots[i].StackSize);
-                    inventorySystem.InventorySlots[i].RemoveFromStack(inventorySystem.InventorySlots[i].StackSize);
-                }
                 UpdateSlotStatic(inventorySystem.InventorySlots[i]);
-
             }
         }
     }

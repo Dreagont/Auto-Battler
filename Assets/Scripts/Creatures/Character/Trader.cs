@@ -12,8 +12,14 @@ public class Trader : MonoBehaviour
     public float experience = 0f;
     public float baseExperienceToNextLevel = 100f;
     public float experienceMultiplier = 1.5f;
-    public GlobalResourceManager GlobalResourceManager;
 
+    public GlobalResourceManager GlobalResourceManager;
+    private Coroutine autoSellCoroutine;
+    public PlayerInventoryHolder InventoryHolder;
+    private void Start()
+    {
+        StartAutoSell();
+    }
     void Update()
     {
         CheckLevelUp();
@@ -58,5 +64,59 @@ public class Trader : MonoBehaviour
     {
         experience += amount;
         CheckLevelUp();
+    }
+
+    private IEnumerator AutoSellCoroutine()
+    {
+        while (true)
+        {
+            AutoSell(InventoryHolder);
+            yield return new WaitForSeconds(1f);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        StopAutoSell();
+    }
+
+
+    public void StartAutoSell()
+    {
+        if (autoSellCoroutine == null)
+        {
+            autoSellCoroutine = StartCoroutine(AutoSellCoroutine());
+        }
+    }
+
+    public void StopAutoSell()
+    {
+        if (autoSellCoroutine != null)
+        {
+            StopCoroutine(autoSellCoroutine);
+            autoSellCoroutine = null;
+        }
+    }
+
+    public void AutoSell(PlayerInventoryHolder inventoryHolder)
+    {
+        InventorySystem inventorySystem = inventoryHolder.SellInventorySystem;
+        for (int i = 0; i < inventorySystem.InventorySize; i++)
+        {
+            if (inventorySystem.InventorySlots[i].ItemData != null)
+            {
+                if (inventorySystem.InventorySlots[i].StackSize >= GetSellAmount())
+                {
+                    SellItem(inventorySystem.InventorySlots[i].ItemData, GetSellAmount());
+                    inventorySystem.InventorySlots[i].RemoveFromStack(GetSellAmount());
+                }
+                else
+                {
+                    SellItem(inventorySystem.InventorySlots[i].ItemData, inventorySystem.InventorySlots[i].StackSize);
+                    inventorySystem.InventorySlots[i].RemoveFromStack(inventorySystem.InventorySlots[i].StackSize);
+                }
+                break;
+            }
+        }
     }
 }

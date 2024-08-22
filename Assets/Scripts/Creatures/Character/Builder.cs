@@ -31,6 +31,27 @@ public class Builder : MonoBehaviour
             Debug.LogWarning("Upgrade Builder House First");
         }
     }
+    public void LevelUpAutoHouse(AutomationHouse house)
+    {
+        if (house.HouseLevel < BuilderHouseLevel())
+        {
+            int levelMulti = CalculateLevelMulti(house.HouseLevel, house);
+
+            if (CanAffordUpgrade(levelMulti, house))
+            {
+                DeductResources(levelMulti, house);
+                house.OnLevelUp();
+            }
+            else
+            {
+                Debug.LogWarning("Not Enough Resousce");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Upgrade Builder House First");
+        }
+    }
 
     public void LevelUpBuiderHouse(BuiderHouse house)
     {
