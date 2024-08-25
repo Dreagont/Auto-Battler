@@ -16,12 +16,16 @@ MonoBehaviour:
   displayName: Sword
   description: Sword
   icon: {fileID: 107538852, guid: c1ed09e0d7a049c408068a4188fee0c7, type: 3}
-  MaxStackSize: 1
+  MaxStackSize: 999
+  sellPrice: 10
   itemType1: 1
   itemType2: 0
+  consumeStats:
+    GoldGain: 0
+    EnergyGain: 0
   EquipableTag: 3
   bonusHealth: 0
   bonusArmor: 0
-  bonusDamage: 66
+  bonusDamage: 10
   bonusAttackSpeed: 0
   bonusRegen: 0

@@ -158,7 +158,8 @@ public class Enemy : MonoBehaviour
                     float roll = Random.Range(0f, 1f);
                     if (roll <= itemDrop.itemDropChance)
                     {
-                        int quantity = Random.Range(itemDrop.minQuantity, itemDrop.maxQuantity + 1);
+                        int quantity = Random.Range(itemDrop.item.EquipableTag == EquipableTag.None ? itemDrop.minQuantity + enemyTypeData.level : itemDrop.minQuantity,
+                            itemDrop.item.EquipableTag == EquipableTag.None ? itemDrop.maxQuantity + 1 + enemyTypeData.level : itemDrop.maxQuantity + 1);
                         for (int i = 0; i < quantity; i++)
                         {
                             actionsManager.PickupItem(itemDrop.item);

@@ -41,19 +41,23 @@ public class Farmer : MonoBehaviour
                 exchangeCooldown -= Time.deltaTime;
                 if (exchangeCooldown <= 0f)
                 {
-                    if (temp <= GlobalResourceManager.ExchangeAbleEnergy)
+                    if (GlobalResourceManager.MaxUseAbleEnergy - GlobalResourceManager.UseAbleEnergy > temp)
                     {
-                        GlobalResourceManager.ExchangeAbleEnergy -= temp;
-                        GlobalResourceManager.UseAbleEnergy += temp;
+                        if (temp <= GlobalResourceManager.ExchangeAbleEnergy)
+                        {
+                            GlobalResourceManager.ExchangeAbleEnergy -= temp;
+                            GlobalResourceManager.UseAbleEnergy += temp;
+                        }
+                        else
+                        {
+                            temp = GlobalResourceManager.ExchangeAbleEnergy;
+                            GlobalResourceManager.ExchangeAbleEnergy = 0;
+                            GlobalResourceManager.UseAbleEnergy += temp;
+                        }
+                        GainExperience(10);
+                        exchangeCooldown = 1f;
                     }
-                    else
-                    {
-                        temp = GlobalResourceManager.ExchangeAbleEnergy;
-                        GlobalResourceManager.ExchangeAbleEnergy = 0;
-                        GlobalResourceManager.UseAbleEnergy += temp;
-                    }
-                    GainExperience(10); 
-                    exchangeCooldown = 1f;
+                    
                 }
             }
         }
@@ -61,12 +65,13 @@ public class Farmer : MonoBehaviour
 
     public void AutoUseItem(InventoryItemData item, int amount)
     {
-        if (GlobalResourceManager.UseAbleEnergy >= 10)
-        {
-            GlobalResourceManager.ExchangeAbleEnergy += item.consumeStats.EnergyGain * amount;
-            GlobalResourceManager.UseAbleEnergy -= 10;
-            GainExperience(10); 
-        }
+        GlobalResourceManager.ExchangeAbleEnergy += item.consumeStats.EnergyGain * amount;
+        GainExperience(10);
+    }
+
+    public int GetUseEnergyOut(InventoryItemData item, int amount)
+    {
+        return item.consumeStats.EnergyGain * amount;
     }
 
     private void GainExperience(float amount)
@@ -135,17 +140,24 @@ public class Farmer : MonoBehaviour
         {
             if (inventorySystem.InventorySlots[i].ItemData != null)
             {
-                if (inventorySystem.InventorySlots[i].StackSize >= GetUseAmount())
+                if (GetUseEnergyOut(inventorySystem.InventorySlots[i].ItemData, GetUseAmount()) < GlobalResourceManager.MaxExchangeAbleEnergy - GlobalResourceManager.ExchangeAbleEnergy)
                 {
-                    AutoUseItem(inventorySystem.InventorySlots[i].ItemData, GetUseAmount());
-                    inventorySystem.InventorySlots[i].RemoveFromStack(GetUseAmount());
+                    if (GlobalResourceManager.UseAbleEnergy >= 10)
+                    {
+                        GlobalResourceManager.UseAbleEnergy -= 10;
+                        if (inventorySystem.InventorySlots[i].StackSize >= GetUseAmount())
+                        {
+                            AutoUseItem(inventorySystem.InventorySlots[i].ItemData, GetUseAmount());
+                            inventorySystem.InventorySlots[i].RemoveFromStack(GetUseAmount());
+                        }
+                        else
+                        {
+                            AutoUseItem(inventorySystem.InventorySlots[i].ItemData, inventorySystem.InventorySlots[i].StackSize);
+                            inventorySystem.InventorySlots[i].RemoveFromStack(inventorySystem.InventorySlots[i].StackSize);
+                        }
+                        break;
+                    }
                 }
-                else
-                {
-                    AutoUseItem(inventorySystem.InventorySlots[i].ItemData, inventorySystem.InventorySlots[i].StackSize);
-                    inventorySystem.InventorySlots[i].RemoveFromStack(inventorySystem.InventorySlots[i].StackSize);
-                }
-                break;
             }
         }
     }

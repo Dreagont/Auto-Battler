@@ -33,7 +33,7 @@ public class HouseUpgradeUI : MonoBehaviour
         }
         if (BuiderHouse != null)
         {
-            houseLevelText.text = "LV" + BuiderHouse.HouseLevel.ToString() + ".Buider House"; 
+            houseLevelText.text = "LV" + BuiderHouse.HouseLevel.ToString() + "." + BuiderHouse.HouseName; 
             goldText.text = (BuiderHouse.BaseGoldUpgradeCost * CalculateLevelMultiBuider(BuiderHouse.HouseLevel, BuiderHouse)).ToString();
             woodText.text = (BuiderHouse.BaseWoodUpgradeCost * CalculateLevelMultiBuider(BuiderHouse.HouseLevel, BuiderHouse)).ToString();
             energyText.text = (BuiderHouse.BaseEnergyUpgradeCost * CalculateLevelMultiBuider(BuiderHouse.HouseLevel, BuiderHouse)).ToString();

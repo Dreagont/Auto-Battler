@@ -6,7 +6,7 @@ public class CapacityHouse : MonoBehaviour
 {
     public int HouseLevel;
     public int BaseWoodUpgradeCost = 300;
-    public int BaseEnergyUpgradeCost = 200;
+    public int BaseEnergyUpgradeCost = 50;
     public int BaseGoldUpgradeCost = 200;
     public string HouseName;
 

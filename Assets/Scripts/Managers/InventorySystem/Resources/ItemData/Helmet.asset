@@ -16,7 +16,8 @@ MonoBehaviour:
   displayName: Helmet
   description: Helmet
   icon: {fileID: -171966941, guid: c1ed09e0d7a049c408068a4188fee0c7, type: 3}
-  MaxStackSize: 100
+  MaxStackSize: 999
+  sellPrice: 10
   itemType1: 1
   itemType2: 0
   consumeStats:
@@ -24,7 +25,7 @@ MonoBehaviour:
     EnergyGain: 0
   EquipableTag: 4
   bonusHealth: 100
-  bonusArmor: 5
+  bonusArmor: 10
   bonusDamage: 0
   bonusAttackSpeed: 0
-  bonusRegen: 15
+  bonusRegen: 10

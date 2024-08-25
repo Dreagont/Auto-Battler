@@ -21,6 +21,7 @@ public class Builder : MonoBehaviour
                 DeductResources(levelMulti, house);
                 house.HouseLevel++;
                 AdjustMaxValues(resourceType, levelMulti);
+                Debug.LogWarning(resourceType.ToString());
             } else
             {
                 Debug.LogWarning("Not Enough Resousce");
@@ -41,6 +42,11 @@ public class Builder : MonoBehaviour
             {
                 DeductResources(levelMulti, house);
                 house.OnLevelUp();
+                if (house.HouseName == "Farmer House")
+                {
+                    AdjustMaxValues(ResourceType.UseAbleEnergy, levelMulti);
+                    AdjustMaxValues(ResourceType.ExchangeEnergy, levelMulti);
+                }
             }
             else
             {
@@ -72,13 +78,13 @@ public class Builder : MonoBehaviour
     {
         return GlobalResourceManager.Gold >= house.BaseGoldUpgradeCost * levelMulti
             && GlobalResourceManager.GetResource(ResourceType.Wood) >= house.BaseWoodUpgradeCost * levelMulti
-            && GlobalResourceManager.GetResource(ResourceType.Energy) >= house.BaseEnergyUpgradeCost * levelMulti;
+            && GlobalResourceManager.GetResource(ResourceType.UseAbleEnergy) >= house.BaseEnergyUpgradeCost * levelMulti;
     }
 
     private void DeductResources(int levelMulti, CapacityHouse house)
     {
         GlobalResourceManager.DeductResource(ResourceType.Wood, house.BaseWoodUpgradeCost * levelMulti);
-        GlobalResourceManager.DeductResource(ResourceType.Energy, house.BaseEnergyUpgradeCost * levelMulti);
+        GlobalResourceManager.DeductResource(ResourceType.UseAbleEnergy, house.BaseEnergyUpgradeCost * levelMulti);
         GlobalResourceManager.Gold -= house.BaseGoldUpgradeCost * levelMulti;
     }
 
@@ -86,13 +92,13 @@ public class Builder : MonoBehaviour
     {
         return GlobalResourceManager.Gold >= house.BaseGoldUpgradeCost * levelMulti
             && GlobalResourceManager.GetResource(ResourceType.Wood) >= house.BaseWoodUpgradeCost * levelMulti
-            && GlobalResourceManager.GetResource(ResourceType.Energy) >= house.BaseEnergyUpgradeCost * levelMulti;
+            && GlobalResourceManager.GetResource(ResourceType.UseAbleEnergy) >= house.BaseEnergyUpgradeCost * levelMulti;
     }
 
     private void DeductResourcesBuilder(int levelMulti, BuiderHouse house)
     {
         GlobalResourceManager.DeductResource(ResourceType.Wood, house.BaseWoodUpgradeCost * levelMulti);
-        GlobalResourceManager.DeductResource(ResourceType.Energy, house.BaseEnergyUpgradeCost * levelMulti);
+        GlobalResourceManager.DeductResource(ResourceType.UseAbleEnergy, house.BaseEnergyUpgradeCost * levelMulti);
         GlobalResourceManager.Gold -= house.BaseGoldUpgradeCost * levelMulti;
     }
     private void AdjustMaxValues(ResourceType resourceType, int levelMulti)
@@ -120,7 +126,8 @@ public enum ResourceType
 {
     None,
     Wood,
-    Energy,
+    UseAbleEnergy,
+    ExchangeEnergy,
     Ore,
     Gold
 }

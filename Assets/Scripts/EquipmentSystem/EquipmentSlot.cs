@@ -1,26 +1,30 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class EquipmentSlot : MonoBehaviour
 {
-    public EquipableTag slotTag;
-    public InventoryItemData equippedItem;
-    public Image icon;
+    public TMP_Text EquipmentName;
+    public TMP_Text EquipmentGoldCost;
+    public TMP_Text EquipmentOreCost;
+    public InventorySlotUi SlotUi;
+    public Blacksmith Blacksmith;
+    public bool isUpgrade = false;
+    public int SlotIndex = 0;
 
-    public void EquipItem(InventoryItemData item)
+    private void Update()
     {
-        if (item.EquipableTag == slotTag)
+        UpdateSlotUI(SlotIndex);
+    }
+
+    public void UpdateSlotUI(int index)
+    {
+        EquipmentName.text = "LV" + Blacksmith.slotLevel[SlotIndex] + "." + SlotUi.equipableTag.ToString();
+        if (isUpgrade)
         {
-            equippedItem = item;
-            icon.sprite = item.icon;
-            icon.enabled = true;
+            EquipmentGoldCost.text = ReuseMethod.FormatNumber(Blacksmith.GetGoldCost(Blacksmith.slotLevel[SlotIndex]));
+            EquipmentOreCost.text = ReuseMethod.FormatNumber(Blacksmith.GetOreCost(Blacksmith.slotLevel[SlotIndex]));
         }
     }
 
-    public void UnequipItem()
-    {
-        equippedItem = null;
-        icon.sprite = null;
-        icon.enabled = false;
-    }
 }

@@ -151,8 +151,14 @@ public class GlobalResourceManager : MonoBehaviour
             case ResourceType.Wood:
                 MaxWoods += amount;
                 break;
-            case ResourceType.Energy:
+            case ResourceType.Ore:
+                MaxOres += amount;
+                break;
+            case ResourceType.UseAbleEnergy:
                 MaxUseAbleEnergy += amount;
+                break;
+            case ResourceType.ExchangeEnergy:
+                MaxExchangeAbleEnergy += amount;
                 break;
         }
     }
@@ -163,7 +169,7 @@ public class GlobalResourceManager : MonoBehaviour
         {
             case ResourceType.Wood:
                 return Woods;
-            case ResourceType.Energy:
+            case ResourceType.UseAbleEnergy:
                 return UseAbleEnergy;
             // Add cases for other resources as needed
             default:
@@ -178,7 +184,7 @@ public class GlobalResourceManager : MonoBehaviour
             case ResourceType.Wood:
                 Woods -= amount;
                 break;
-            case ResourceType.Energy:
+            case ResourceType.UseAbleEnergy:
                 UseAbleEnergy -= amount;
                 break;
                 // Add cases for other resources as needed

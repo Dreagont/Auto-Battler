@@ -18,6 +18,14 @@ public class Fighter : MonoBehaviour
     private float SumArmor;
     private float SumRegenAmount;
 
+    public float GearMaxhealth;
+    public float GearAttackSpeed;
+    public float GearAttackDamage;
+    public float GearArmor;
+    public float GearRegenAmount;
+
+    private int oldfilledSlots = 0;
+
     private float attackCooldown = 0f;
     private float regenCooldown = 0f;
 
@@ -32,18 +40,22 @@ public class Fighter : MonoBehaviour
     public TMP_Text popupText;
     public float increase;
     public Canvas canvas;
-    public StaticInventoryDisplay GearInventory;
+    public PlayerInventoryHolder playerInventory;
+    public InventorySystem inventorySystem;
     public BarManager healthBar;
     public BarManager EXPBar;
     public TextMeshProUGUI currentLevelText;
 
     public GlobalResourceManager GlobalResourceManager;
     public bool Died = false;
+    
+    public Blacksmith Blacksmith;
 
     void Start()
     {
         enemies = new List<Enemy>(FindObjectsOfType<Enemy>());
         health = baseMaxHealth;
+        inventorySystem = playerInventory.PrimaryInventorySystem;
         healthBar.UpdateBar(health, baseMaxHealth);
         EXPBar.UpdateBar(experience, baseExperienceToNextLevel);
         SelectNewTarget();
@@ -51,6 +63,14 @@ public class Fighter : MonoBehaviour
 
     void Update()
     {
+        int filledSlots = CountFilledSlots(inventorySystem);
+
+        if (filledSlots != oldfilledSlots)
+        {
+            oldfilledSlots = filledSlots;
+            GetGearStats(inventorySystem);
+        }
+
         UpdatePlayerStast();
 
         currentLevelText.text = "LV." + level.ToString();
@@ -96,11 +116,11 @@ public class Fighter : MonoBehaviour
 
     public void UpdatePlayerStast()
     {
-        SumMaxhealth = baseMaxHealth + GearInventory.GearMaxhealth;
-        SumAttackDamage = baseAttackDamage + GearInventory.GearAttackDamage;
-        SumAttackSpeed = baseAttackSpeed + GearInventory.GearAttackSpeed;
-        SumArmor = baseArmor + GearInventory.GearArmor;
-        SumRegenAmount = baseRegenAmount + GearInventory.GearRegenAmount;
+        SumMaxhealth = baseMaxHealth + GearMaxhealth;
+        SumAttackDamage = baseAttackDamage + GearAttackDamage;
+        SumAttackSpeed = baseAttackSpeed + GearAttackSpeed;
+        SumArmor = baseArmor + GearArmor;
+        SumRegenAmount = baseRegenAmount + GearRegenAmount;
         healthBar.UpdateBar(health, SumMaxhealth);
     }
 
@@ -156,7 +176,7 @@ public class Fighter : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        float amount = damage - baseArmor;
+        float amount = damage - SumArmor;
         if (amount < 1)
         {
             amount = 1;
@@ -240,4 +260,51 @@ public class Fighter : MonoBehaviour
     internal bool IsHealthFull() => health == SumMaxhealth;
 
     internal bool IsDead() => health <= 0;
+
+    public void GetGearStats(InventorySystem inventoryToDisplay)
+    {
+        // Reset gear stats
+        GearMaxhealth = 0;
+        GearArmor = 0;
+        GearAttackDamage = 0;
+        GearAttackSpeed = 0;
+        GearRegenAmount = 0;
+
+        for (int i = 0; i < inventoryToDisplay.InventorySize; i++)
+        {
+            var slot = inventoryToDisplay.InventorySlots[i];
+            if (slot.ItemData != null)
+            {
+                int quantity = slot.StackSize;
+                float stackMultiplier = 1 + (0.05f * (quantity - 1));
+                int level = Blacksmith.slotLevel[i];
+
+                // Calculate the stat bonus based on item level
+                float levelMultiplier = 1 + 0.1f * (level - 1);
+
+                GearMaxhealth += slot.ItemData.bonusHealth * stackMultiplier * levelMultiplier;
+                GearArmor += slot.ItemData.bonusArmor * stackMultiplier * levelMultiplier;
+                GearAttackDamage += slot.ItemData.bonusDamage * stackMultiplier * levelMultiplier;
+                GearAttackSpeed += slot.ItemData.bonusAttackSpeed * stackMultiplier * levelMultiplier;
+                GearRegenAmount += slot.ItemData.bonusRegen * stackMultiplier * levelMultiplier;
+            }
+        }
+    }
+
+
+    public int CountFilledSlots(InventorySystem inventorySystem)
+    {
+        int filledSlotsCount = 0;
+
+        for (int i = 0; i < inventorySystem.InventorySize; i++)
+        {
+            if (inventorySystem.InventorySlots[i].ItemData != null)
+            {
+                filledSlotsCount++;
+            }
+        }
+
+        return filledSlotsCount;
+    }
+
 }

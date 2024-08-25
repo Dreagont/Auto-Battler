@@ -8,6 +8,14 @@ public class ItemDrop
     public int minQuantity = 1;
     public int maxQuantity = 1;
     public float itemDropChance = 0.5f;
+    public void AdjustQuantityBasedOnLevel(int level)
+    {
+        if (item.EquipableTag == EquipableTag.None)
+        {
+            minQuantity += (level - 1);
+            maxQuantity += (level - 1);
+        }
+    }
 }
 
 public enum EnemyTraits
@@ -39,7 +47,26 @@ public class EnemyTypeData : ScriptableObject
         { EnemyTraits.Boss, 5f },
         { EnemyTraits.ChapterBoss, 10f }
     };
+    public List<ItemDrop> GetAdjustedDrops(int level)
+    {
+        List<ItemDrop> adjustedDrops = new List<ItemDrop>();
 
+        foreach (var drop in dropItems)
+        {
+            ItemDrop adjustedDrop = new ItemDrop
+            {
+                item = drop.item,
+                minQuantity = drop.minQuantity,
+                maxQuantity = drop.maxQuantity,
+                itemDropChance = drop.itemDropChance
+            };
+
+            adjustedDrop.AdjustQuantityBasedOnLevel(level);
+            adjustedDrops.Add(adjustedDrop);
+        }
+
+        return adjustedDrops;
+    }
     public float GetMaxHealth(int level)
     {
         return baseMaxHealth * (1f + (level - 1) * 0.15f) * traitMultipliers[enemyTraits];

@@ -8,6 +8,7 @@ public class BuiderHouse : MonoBehaviour
     public int BaseWoodUpgradeCost = 300;
     public int BaseEnergyUpgradeCost = 200;
     public int BaseGoldUpgradeCost = 200;
+    public string HouseName;
 
     public float LevelUpMultiply = 1.5f;
 
