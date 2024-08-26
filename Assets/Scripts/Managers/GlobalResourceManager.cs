@@ -66,6 +66,10 @@ public class GlobalResourceManager : MonoBehaviour
     public void SaveResourceData()
     {
         SaveGameManager.data.gold = Gold;
+        SaveGameManager.data.ore = Ores;
+        SaveGameManager.data.wood = Woods;
+        SaveGameManager.data.maxOre = MaxOres;
+        SaveGameManager.data.maxWood = MaxWoods;
         SaveGameManager.data.exchangeableEnergy = ExchangeAbleEnergy;
         SaveGameManager.data.usableEnergy = UseAbleEnergy;
         SaveGameManager.data.maxExchangeableEnergy = MaxExchangeAbleEnergy;
@@ -76,6 +80,10 @@ public class GlobalResourceManager : MonoBehaviour
     public void LoadResourceData(SaveData data)
     {
         Gold = data.gold;
+        Ores = data.ore;
+        Woods = data.wood;
+        MaxOres = data.maxOre;
+        MaxWoods = data.maxWood;
         ExchangeAbleEnergy = data.exchangeableEnergy;
         UseAbleEnergy = data.usableEnergy;
         MaxExchangeAbleEnergy = data.maxExchangeableEnergy;

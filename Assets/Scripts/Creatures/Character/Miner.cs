@@ -25,12 +25,34 @@ public class Miner : MonoBehaviour
 
     void Start()
     {
-
+        InitSaveData();
     }
 
     void Update()
     {
         CheckLevelUp();
+        InitSaveData();
+    }
+
+    public void InitSaveData()
+    {
+        SaveGameManager.data.minerLevel = level;
+        SaveGameManager.data.minerExperience = experience;
+        SaveGameManager.data.minerBaseExperienceToNextLevel = baseExperienceToNextLevel;
+        SaveGameManager.data.MiningEnergyPerSecond = MiningEnergyPerSecond;
+        SaveGameManager.data.MiningQuality = MiningQuality;
+        SaveGameManager.data.MiningSpeed = MiningSpeed;
+    }
+
+    public void LoadSaveData()
+    {
+        level = SaveGameManager.data.minerLevel;
+        experience = SaveGameManager.data.minerExperience;
+        baseExperienceToNextLevel = SaveGameManager.data.minerBaseExperienceToNextLevel;
+        MiningSpeed = SaveGameManager.data.MiningSpeed;
+        MiningQuality = SaveGameManager.data.MiningQuality;
+        MiningEnergyPerSecond = SaveGameManager.data.MiningEnergyPerSecond;
+        StatsMultiplier(level);
     }
 
     public void MineOre()
@@ -66,13 +88,21 @@ public class Miner : MonoBehaviour
         experience -= baseExperienceToNextLevel;
         baseExperienceToNextLevel *= experienceMultiplier;
 
-        MiningSpeed += 0.1f; 
-        MiningQuality += 2; 
-        MiningEnergyPerSecond = Mathf.Max(MiningEnergyPerSecond - 1f, 1f); 
+        StatsMultiplier(level);
 
         Debug.Log("Miner leveled up to level " + level);
     }
 
+    private void StatsMultiplier(int currentLevel)
+    {
+        MiningSpeed = 1;
+        MiningQuality = 5;
+        MiningEnergyPerSecond = 10;
+
+        MiningSpeed += currentLevel * 0.1f;
+        MiningQuality += currentLevel * 2;
+        MiningEnergyPerSecond = Mathf.Max(MiningEnergyPerSecond - currentLevel, 1f);
+    }
     public void GainExperience(float amount)
     {
         experience += amount;

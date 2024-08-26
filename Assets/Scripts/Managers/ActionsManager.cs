@@ -13,7 +13,8 @@ public class ActionsManager : MonoBehaviour
 
     public Camera MainCamera;
     public Camera Camera1;
-    private bool isCamera1Active = true;
+    public GameObject FakeScreen;
+    //private bool isCamera1Active = true;
 
 
     public GameObject TimePanel;
@@ -24,6 +25,7 @@ public class ActionsManager : MonoBehaviour
         TimePanel.SetActive(false);
         MainCamera.gameObject.SetActive(true);
         Camera1.gameObject.SetActive(false);
+        //FakeScreen.SetActive(true);
     }
 
     void Update()
@@ -78,19 +80,27 @@ public class ActionsManager : MonoBehaviour
         Time.timeScale = 1f;
     }
 
-    public void SwitchCamera()
+    public void SwitchCamera(int index)
     {
-        if (isCamera1Active)
+        if (index == 0)
         {
             MainCamera.gameObject.SetActive(false);
             Camera1.gameObject.SetActive(true);
-            isCamera1Active = false;
         } else
         {
             MainCamera.gameObject.SetActive(true);
             Camera1.gameObject.SetActive(false);
-            isCamera1Active = true;
         }
 
+    }
+
+    public void SelectStartMode(int index)
+    {
+        if (index == 0)
+        {
+            SaveGameManager.TryLoadData();
+        }
+
+        FakeScreen.gameObject.SetActive(false);
     }
 } 

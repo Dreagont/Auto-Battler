@@ -19,12 +19,32 @@ public class Trader : MonoBehaviour
     private void Start()
     {
         StartAutoSell();
+        InitSaveData();
     }
     void Update()
     {
         CheckLevelUp();
+        InitSaveData();
+    }
+    public void InitSaveData()
+    {
+        SaveGameManager.data.traderSellBonusCount = SellBonusCount;
+        SaveGameManager.data.traderBaseExperienceToNextLevel = baseExperienceToNextLevel;
+        SaveGameManager.data.traderSellCount = sellCount;
+        SaveGameManager.data.traderExperience = experience;
+        SaveGameManager.data.traderSellBonusGold = SellBonusGold;
+        SaveGameManager.data.traderLevel = level;
     }
 
+    public void LoadSaveData()
+    {
+        level = SaveGameManager.data.traderLevel;
+        experience = SaveGameManager.data.traderExperience;
+        sellCount = SaveGameManager.data.traderSellCount;
+        SellBonusGold = SaveGameManager.data.traderSellBonusGold;
+        SellBonusCount = SaveGameManager.data.traderSellBonusCount;
+        baseExperienceToNextLevel = SaveGameManager.data.traderBaseExperienceToNextLevel;
+    }
     public void SellItem(InventoryItemData item, int amount)
     {
         GainExperience(item.sellPrice * SellBonusGold);

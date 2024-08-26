@@ -24,10 +24,32 @@ public class Farmer : MonoBehaviour
     private void Start()
     {
         StartAutoUse();
+        InitSaveData();
     }
     void Update()
     {
         CheckLevelUp();
+        InitSaveData();
+    }
+
+    public void InitSaveData()
+    {
+        SaveGameManager.data.farmerExchangeAmount = ExchangeAmount;
+        SaveGameManager.data.farmerBaseExperienceToNextLevel = baseExperienceToNextLevel;
+        SaveGameManager.data.farmerExchangeBonusRate = ExchangeBonusRate;
+        SaveGameManager.data.farmerExperience = experience;
+        SaveGameManager.data.farmerUseAmount = UseAmount;
+        SaveGameManager.data.farmerLevel = level;
+    }
+
+    public void LoadSaveData()
+    {
+        level = SaveGameManager.data.farmerLevel;
+        experience = SaveGameManager.data.farmerExperience;
+        ExchangeAmount = SaveGameManager.data.farmerExchangeAmount;
+        UseAmount = SaveGameManager.data.farmerUseAmount;
+        ExchangeBonusRate = SaveGameManager.data.farmerExchangeBonusRate;
+        baseExperienceToNextLevel = SaveGameManager.data.farmerBaseExperienceToNextLevel;
     }
 
     public void ExchangeEnergy(int bonusAmount)

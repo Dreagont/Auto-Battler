@@ -24,14 +24,35 @@ public class Lumberjack : MonoBehaviour
 
     void Start()
     {
-
+        InitSaveData();
     }
 
     void Update()
     {
         CheckLevelUp();
+        InitSaveData();
     }
-    
+    public void InitSaveData()
+    {
+        SaveGameManager.data.ChoppingQuality = ChoppingQuality;
+        SaveGameManager.data.ChoppingSpeed = ChoppingSpeed;
+        SaveGameManager.data.ChoppingEnergyPerSecond = ChoppingEnergyPerSecond;
+        SaveGameManager.data.lummberLevel = level;
+        SaveGameManager.data.lummerExperience = experience;
+        SaveGameManager.data.lummerBaseExperienceToNextLevel = baseExperienceToNextLevel;
+    }
+
+    public void LoadSaveData()
+    {
+        ChoppingQuality = SaveGameManager.data.ChoppingQuality;
+        ChoppingSpeed = SaveGameManager.data.ChoppingSpeed;
+        ChoppingEnergyPerSecond = SaveGameManager.data.ChoppingEnergyPerSecond;
+        level = SaveGameManager.data.lummberLevel;
+        experience = SaveGameManager.data.lummerExperience;
+        baseExperienceToNextLevel = SaveGameManager.data.lummerBaseExperienceToNextLevel;
+
+    }
+
     public void ChopWood()
     {
         if (GlobalResourceManager.Woods < GlobalResourceManager.MaxWoods)

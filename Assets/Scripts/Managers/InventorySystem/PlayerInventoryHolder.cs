@@ -22,7 +22,15 @@ public class PlayerInventoryHolder : InventoryHolder
 
     private GlobalResourceManager globalResourceManager;
     private EnemySpawner enemySpawner;
-    
+
+    public AutomationHouse farmerHouse;
+    public AutomationHouse traderHouse;
+    public CapacityHouse lummerHouse;
+    public CapacityHouse minerHouse;
+    public BlacksmithHouse blacksmithHouse;
+    public BuilderHouse builderHouse;
+    private Fighter character;
+
     protected override void Awake()
     {
         base.Awake();
@@ -34,9 +42,11 @@ public class PlayerInventoryHolder : InventoryHolder
         {
             SaveGameManager.data = new SaveData();
         }
-
+        character = GetComponent<Fighter>();
         SaveGameManager.data.playerInventory = new InventorySaveData(primaryInventorySystem);
         SaveGameManager.data.playerEquipment = new InventorySaveData(secondaryInventorySystem);
+        SaveGameManager.data.playerAutoSell = new InventorySaveData(sellInventorySystem);
+        SaveGameManager.data.playerAutoUse = new InventorySaveData(useInventorySystem);
 
         InitPlayerStatsSave();
     }
@@ -61,29 +71,63 @@ public class PlayerInventoryHolder : InventoryHolder
     }
 
 
-    private void LoadAll(SaveData data)
+    public void LoadAll(SaveData data)
     {
         LoadInventory(data);
         LoadPlayerStats(data);
+        LoadCharData(data);
+        LoadHouseData(data);
+
         globalResourceManager.LoadResourceData(data);
         enemySpawner.LoadSpawnerData(data);
+    }
+
+    public void LoadCharData(SaveData data)
+    {
+        Miner miner = FindAnyObjectByType<Miner>();
+        Builder builder = FindAnyObjectByType<Builder>();
+        Farmer farmer = FindAnyObjectByType<Farmer>();
+        Trader trader = FindAnyObjectByType<Trader>();
+        Blacksmith blacksmith = FindAnyObjectByType<Blacksmith>();
+        Lumberjack lumberjack = FindAnyObjectByType<Lumberjack>();
+
+        miner.LoadSaveData();
+        builder.LoadSaveData();
+        farmer.LoadSaveData();
+        trader.LoadSaveData();
+        blacksmith.LoadSaveData();
+        lumberjack.LoadSaveData();
+    }
+
+    public void LoadHouseData(SaveData data)
+    {
+        minerHouse.LoadSaveData();
+        builderHouse.LoadSaveData();
+        farmerHouse.LoadSaveData();
+        traderHouse.LoadSaveData();
+        blacksmithHouse.LoadSaveData();
+        lummerHouse.LoadSaveData();
     }
 
     private void LoadInventory(SaveData data)
     {
         if (data != null && data.playerInventory.InventorySystem != null && data.playerEquipment.InventorySystem != null)
         {
-            ClearInventory(primaryInventorySystem);
-            ClearInventory(secondaryInventorySystem);
+            //ClearInventory(primaryInventorySystem);
+            //ClearInventory(secondaryInventorySystem);
+            //ClearInventory(sellInventorySystem);
+            //ClearInventory(useInventorySystem);
 
             this.primaryInventorySystem = data.playerInventory.InventorySystem;
             this.secondaryInventorySystem = data.playerEquipment.InventorySystem;
+            this.sellInventorySystem = data.playerAutoSell.InventorySystem;
+            this.useInventorySystem = data.playerAutoUse.InventorySystem;
+            character.inventorySystem = this.primaryInventorySystem;
         }
     }
 
     private void LoadPlayerStats(SaveData data)
     {
-        Fighter character = GetComponent<Fighter>();
         character.baseMaxHealth = data.playerBaseMaxHealth;
         character.health = data.playerHealth;
         character.baseAttackSpeed = data.playerBaseAttackSpeed;

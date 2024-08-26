@@ -5,29 +5,46 @@ using UnityEngine;
 
 public class Blacksmith : MonoBehaviour
 {
-    //private float Cooldown = 0f;
+    public int level = 1;
+    public float UpgradeResourceCostReduceRatePerLevel = 0.1f;
+    public int maxLevel = 10;
+
+    public float currentExp = 0;
+    public float expToNextLevel = 100;
+    public float expGrowthRate = 1.5f;
 
     public int BaseOreUpgradeCost = 200;
     public int BaseGoldUpgradeCost = 100;
     public float ItemLevelMultiplier = 1.5f;
-
     public int[] slotLevel;
-
     public MapBonusManager currentMap;
-
     public GlobalResourceManager GlobalResourceManager;
-
     public Fighter Fighter;
     public BlacksmithHouse BlacksmithHouse;
 
     void Start()
     {
         InitItemLevel();
+        InitSaveData();
     }
 
     void Update()
     {
-        
+        InitSaveData();
+    }
+
+    public void InitSaveData()
+    {
+        SaveGameManager.data.blacksmithLevel = level;
+        SaveGameManager.data.blacksmithCurrentExp = currentExp;
+        SaveGameManager.data.blacksmithExpToNextLevel = expToNextLevel;
+    }
+
+    public void LoadSaveData()
+    {
+        level = SaveGameManager.data.blacksmithLevel;
+        currentExp = SaveGameManager.data.blacksmithCurrentExp;
+        expToNextLevel = SaveGameManager.data.blacksmithCurrentExp;
     }
 
     public void InitItemLevel()
@@ -48,37 +65,71 @@ public class Blacksmith : MonoBehaviour
                 slotLevel[index]++;
                 DeductResources(levelMulti);
                 Fighter.GetGearStats(Fighter.inventorySystem);
-                Debug.Log("Upgrade item succ");
+                GainExperience(levelMulti * 10);
+                Debug.Log("Upgrade item successful");
             }
-        } else
+        }
+        else
         {
             Debug.LogWarning("Upgrade House First");
         }
-        
     }
 
     private bool CanAffordUpgrade(float levelMulti)
     {
-        return GlobalResourceManager.Gold >= BaseGoldUpgradeCost * levelMulti
-            && GlobalResourceManager.Ores >= BaseOreUpgradeCost * levelMulti;
+        float reducedGoldCost = CalculateReducedCost(BaseGoldUpgradeCost * levelMulti);
+        float reducedOreCost = CalculateReducedCost(BaseOreUpgradeCost * levelMulti);
+
+        return GlobalResourceManager.Gold >= reducedGoldCost
+            && GlobalResourceManager.Ores >= reducedOreCost;
     }
+
     private float CalculateLevelMulti(int itemLevel)
     {
-        return (itemLevel > 1 ? (itemLevel - 1) * 1.5f : 1);
+        return (itemLevel > 1 ? (itemLevel - 1) * ItemLevelMultiplier : 1);
     }
+
     private void DeductResources(float levelMulti)
     {
+        float reducedGoldCost = CalculateReducedCost(BaseGoldUpgradeCost * levelMulti);
+        float reducedOreCost = CalculateReducedCost(BaseOreUpgradeCost * levelMulti);
 
-        GlobalResourceManager.Ores -= (int)(BaseGoldUpgradeCost * levelMulti);
-        GlobalResourceManager.Gold -= (int)(BaseGoldUpgradeCost * levelMulti);
+        GlobalResourceManager.Ores -= (int)reducedOreCost;
+        GlobalResourceManager.Gold -= (int)reducedGoldCost;
     }
 
     public int GetGoldCost(int level)
     {
-        return (int)(BaseGoldUpgradeCost * CalculateLevelMulti(level));
+        float cost = BaseGoldUpgradeCost * CalculateLevelMulti(level);
+        return (int)CalculateReducedCost(cost);
     }
+
     public int GetOreCost(int level)
     {
-        return (int)(BaseOreUpgradeCost * CalculateLevelMulti(level));
+        float cost = BaseOreUpgradeCost * CalculateLevelMulti(level);
+        return (int)CalculateReducedCost(cost);
+    }
+
+    private void GainExperience(float expAmount)
+    {
+        currentExp += expAmount;
+        while (currentExp >= expToNextLevel && level < maxLevel)
+        {
+            LevelUp();
+        }
+    }
+
+    private void LevelUp()
+    {
+        level++;
+        currentExp -= expToNextLevel;
+        expToNextLevel *= expGrowthRate;
+        Debug.Log($"Blacksmith leveled up to {level}!");
+    }
+
+    private float CalculateReducedCost(float baseCost)
+    {
+        float reduction = (level - 1) * UpgradeResourceCostReduceRatePerLevel;
+        return Mathf.Max(baseCost * (1 - reduction), 0);
     }
 }

@@ -8,12 +8,13 @@ public class AutomationHouse : CapacityHouse
 
     void Start()
     {
+        InitSaveData();
         UpdateSlots();
     }
 
     void Update()
     {
-        
+        InitSaveData();
     }
 
     public void UnLockSlot()
@@ -24,7 +25,7 @@ public class AutomationHouse : CapacityHouse
 
             if (slotIndex >= 0 && slotIndex < slots.Length)
             {
-                slots[slotIndex].SetActive(true); 
+                slots[slotIndex].gameObject.SetActive(true); 
             }
         }
     }
