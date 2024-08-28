@@ -26,3 +26,11 @@ MonoBehaviour:
     minQuantity: 1
     maxQuantity: 1
     itemDropChance: 0.4
+  - item: {fileID: 11400000, guid: be2a5343cd277d44cac187d1cf59e363, type: 2}
+    minQuantity: 2
+    maxQuantity: 5
+    itemDropChance: 0.4
+  - item: {fileID: 11400000, guid: 0da0a45d22892964f9b73cb1cca26cd5, type: 2}
+    minQuantity: 1
+    maxQuantity: 1
+    itemDropChance: 0.4

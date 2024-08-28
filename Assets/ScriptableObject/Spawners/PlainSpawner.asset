@@ -17,6 +17,6 @@ MonoBehaviour:
   - {fileID: 2452360731241745265, guid: 9ce124a1de190dc4e99b3a85f76b6248, type: 3}
   spawnDelay: 1
   enemyLevel: 1
-  levelUpCount: 5
+  levelUpCount: 10
   eliteSpawnRate: 0.05
   bossSpawnRate: 0.01

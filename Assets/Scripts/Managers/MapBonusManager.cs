@@ -5,8 +5,8 @@ using UnityEngine.Tilemaps;
 
 public class MapBonusManager : MonoBehaviour
 {
-    public HarvestAbleArena lumberArenaHarvestBonus;
-    public HarvestAbleArena minerArenaHarvestBonus;
+    public MapProperty lumberArenaHarvestBonus;
+    public MapProperty minerArenaHarvestBonus;
     void Start()
     {
         

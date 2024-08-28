@@ -73,7 +73,7 @@ public class Fighter : MonoBehaviour
 
         UpdatePlayerStast();
 
-        currentLevelText.text = "LV." + level.ToString();
+        currentLevelText.text = "LV" + level.ToString();
 
         if (IsHealthFull())
         {
@@ -270,8 +270,6 @@ public class Fighter : MonoBehaviour
         GearAttackSpeed = 0;
         GearRegenAmount = 0;
 
-        Debug.LogWarning("getgear");
-
         for (int i = 0; i < inventoryToDisplay.InventorySize; i++)
         {
             var slot = inventoryToDisplay.InventorySlots[i];
@@ -291,7 +289,6 @@ public class Fighter : MonoBehaviour
                 GearRegenAmount += slot.ItemData.bonusRegen * stackMultiplier * levelMultiplier;
             } else
             {
-                Debug.LogWarning("null here: "+ i);
             }
         }
     }

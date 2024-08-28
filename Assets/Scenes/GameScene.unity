@@ -1632,7 +1632,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 37.4, y: -10.7455}
-  m_SizeDelta: {x: 0, y: 21.491}
+  m_SizeDelta: {x: 74.8, y: 21.491}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &56440246
 MonoBehaviour:
@@ -2196,7 +2196,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 141.6853, y: -10.7455}
-  m_SizeDelta: {x: 0, y: 21.491}
+  m_SizeDelta: {x: 106.8, y: 21.491}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &93276149
 MonoBehaviour:
@@ -4222,8 +4222,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa24ec75a6fb1e84e887fc34b8f0c604, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lumberArenaHarvestBonus: {fileID: 11400000, guid: 5708d1945b822c543940ad9fb7387d68, type: 2}
-  minerArenaHarvestBonus: {fileID: 11400000, guid: 5708d1945b822c543940ad9fb7387d68, type: 2}
+  lumberArenaHarvestBonus: {fileID: 7162205072022095282}
+  minerArenaHarvestBonus: {fileID: 7162205072022095282}
 --- !u!114 &185663758
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5402,7 +5402,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 37.4, y: -10.7455}
-  m_SizeDelta: {x: 0, y: 21.491}
+  m_SizeDelta: {x: 74.8, y: 21.491}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &236300552
 MonoBehaviour:
@@ -43228,13 +43228,28 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 741257079478179377}
+  - component: {fileID: 2294147230152002303}
   m_Layer: 0
-  m_Name: Cave
+  m_Name: LV1.Cave
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
+--- !u!114 &2294147230152002303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2294147230152002302}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c72eaf57d6c88440bbffff26ccf3994, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  arena: {fileID: 11400000, guid: 5708d1945b822c543940ad9fb7387d68, type: 2}
+  spawnerStats: {fileID: 11400000, guid: 4c5a01eea4c4de54eaacf18d82db80c9, type: 2}
 --- !u!1 &2439331635256358067
 GameObject:
   m_ObjectHideFlags: 0
@@ -50630,8 +50645,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7162205072022095281}
+  - component: {fileID: 7162205072022095282}
   m_Layer: 0
-  m_Name: Plain
+  m_Name: LV1.Plain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -51319,6 +51335,20 @@ Transform:
   - {fileID: 5327967592092425202}
   m_Father: {fileID: 7354746947784628890}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7162205072022095282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6261764625721270383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c72eaf57d6c88440bbffff26ccf3994, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  arena: {fileID: 11400000, guid: 5708d1945b822c543940ad9fb7387d68, type: 2}
+  spawnerStats: {fileID: 11400000, guid: b2ba4c7bd1f950a499cd4934983c2ae8, type: 2}
 --- !u!1839735485 &7229340843850413180
 Tilemap:
   m_ObjectHideFlags: 0

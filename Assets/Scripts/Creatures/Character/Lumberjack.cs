@@ -60,12 +60,12 @@ public class Lumberjack : MonoBehaviour
             Cooldown -= Time.deltaTime;
             if (Cooldown <= 0f)
             {
-                if (GlobalResourceManager.UseAbleEnergy >= currentMap.lumberArenaHarvestBonus.EnergyCost)
+                if (GlobalResourceManager.UseAbleEnergy >= currentMap.lumberArenaHarvestBonus.arena.EnergyCost)
                 {
-                    GlobalResourceManager.Woods += ChoppingQuality + currentMap.lumberArenaHarvestBonus.arenaQualityBonus;
-                    GlobalResourceManager.UseAbleEnergy -= currentMap.lumberArenaHarvestBonus.EnergyCost;
-                    Cooldown = 1f / (ChoppingSpeed + currentMap.lumberArenaHarvestBonus.arenaSpeedBonus);
-                    GainExperience(ChoppingQuality + currentMap.lumberArenaHarvestBonus.arenaQualityBonus);
+                    GlobalResourceManager.Woods += ChoppingQuality + currentMap.lumberArenaHarvestBonus.arena.arenaQualityBonus;
+                    GlobalResourceManager.UseAbleEnergy -= currentMap.lumberArenaHarvestBonus.arena.EnergyCost;
+                    Cooldown = 1f / (ChoppingSpeed + currentMap.lumberArenaHarvestBonus.arena.arenaSpeedBonus);
+                    GainExperience(ChoppingQuality + currentMap.lumberArenaHarvestBonus.arena.arenaQualityBonus);
 
                 }
             }

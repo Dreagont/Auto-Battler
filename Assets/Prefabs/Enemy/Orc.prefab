@@ -318,7 +318,7 @@ MonoBehaviour:
   goldDrop: 0
   EnemyTraits: 0
   level: 0
-  currentLevelText: {fileID: 1562224875320216309}
+  enemyText: {fileID: 1562224875320216309}
 --- !u!1 &3714718389187681507
 GameObject:
   m_ObjectHideFlags: 0

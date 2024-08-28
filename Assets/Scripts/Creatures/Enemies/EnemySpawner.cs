@@ -35,6 +35,7 @@ public class EnemySpawner : MonoBehaviour
 
     void Update()
     {
+        SaveSpawnerData();
         if (character != null)
         {
             if (character.IsDead())

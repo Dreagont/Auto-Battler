@@ -62,12 +62,12 @@ public class Miner : MonoBehaviour
             Cooldown -= Time.deltaTime;
             if (Cooldown <= 0f)
             {
-                if (GlobalResourceManager.UseAbleEnergy >= currentMap.minerArenaHarvestBonus.EnergyCost)
+                if (GlobalResourceManager.UseAbleEnergy >= currentMap.minerArenaHarvestBonus.arena.EnergyCost)
                 {
-                    GlobalResourceManager.Ores += MiningQuality + currentMap.minerArenaHarvestBonus.arenaQualityBonus;
-                    GlobalResourceManager.UseAbleEnergy -= currentMap.minerArenaHarvestBonus.EnergyCost;
-                    Cooldown = 1f / (MiningSpeed + currentMap.minerArenaHarvestBonus.arenaSpeedBonus);
-                    GainExperience(MiningQuality + currentMap.minerArenaHarvestBonus.arenaQualityBonus);
+                    GlobalResourceManager.Ores += MiningQuality + currentMap.minerArenaHarvestBonus.arena.arenaQualityBonus;
+                    GlobalResourceManager.UseAbleEnergy -= currentMap.minerArenaHarvestBonus.arena.EnergyCost;
+                    Cooldown = 1f / (MiningSpeed + currentMap.minerArenaHarvestBonus.arena.arenaSpeedBonus);
+                    GainExperience(MiningQuality + currentMap.minerArenaHarvestBonus.arena.arenaQualityBonus);
                 }
             }
         }

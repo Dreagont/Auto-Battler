@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Helmet
   icon: {fileID: -171966941, guid: c1ed09e0d7a049c408068a4188fee0c7, type: 3}
   MaxStackSize: 999
-  sellPrice: 10
+  sellPrice: 120
   itemType1: 1
   itemType2: 0
   consumeStats:

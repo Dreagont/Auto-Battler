@@ -17,11 +17,11 @@ MonoBehaviour:
   description: Carrot
   icon: {fileID: -1429853927, guid: 9470b17ec078762449d7fbcec5647f51, type: 3}
   MaxStackSize: 9999
-  sellPrice: 10
+  sellPrice: 60
   itemType1: 2
   itemType2: 3
   consumeStats:
-    GoldGain: 15
+    GoldGain: 0
     EnergyGain: 100
   EquipableTag: 0
   bonusHealth: 0

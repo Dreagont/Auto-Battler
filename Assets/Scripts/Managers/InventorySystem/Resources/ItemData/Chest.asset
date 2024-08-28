@@ -16,12 +16,16 @@ MonoBehaviour:
   displayName: Chest
   description: Chest
   icon: {fileID: 460919713, guid: c1ed09e0d7a049c408068a4188fee0c7, type: 3}
-  MaxStackSize: 1
+  MaxStackSize: 9999
+  sellPrice: 123
   itemType1: 1
   itemType2: 0
+  consumeStats:
+    GoldGain: 0
+    EnergyGain: 0
   EquipableTag: 1
   bonusHealth: 0
-  bonusArmor: 0
+  bonusArmor: 50
   bonusDamage: 0
   bonusAttackSpeed: 0
-  bonusRegen: 0
+  bonusRegen: 5

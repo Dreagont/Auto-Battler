@@ -20,12 +20,9 @@ public class Enemy : MonoBehaviour
     private EnemySpawner spawner;
     public EnemyTypeData enemyTypeData;
     private ActionsManager actionsManager;
-    public int dropAmount = 1;
-    public int goldDrop = 0;
     public EnemyTraits EnemyTraits;
     public int level;
-    public TextMeshProUGUI currentLevelText;
-
+    public TextMeshProUGUI enemyText;
     protected virtual void Start()
     {
         InitializeEnemy();
@@ -67,7 +64,9 @@ public class Enemy : MonoBehaviour
 
     protected virtual void Update()
     {
-        currentLevelText.text = "LV." + level.ToString();
+        
+
+        enemyTextUpdate();
 
         attackCooldown -= Time.deltaTime;
         if (attackCooldown <= 0f)
@@ -75,6 +74,11 @@ public class Enemy : MonoBehaviour
             Attack();
             attackCooldown = 1f / attackSpeed;
         }
+    }
+
+    private void enemyTextUpdate()
+    {
+        enemyText.text = "LV" + level.ToString() + "." +enemyTypeData.enemyTraits.ToString() + " " + enemyTypeData.enemyTypeName;
     }
 
     protected virtual void Attack()
@@ -158,8 +162,7 @@ public class Enemy : MonoBehaviour
                     float roll = Random.Range(0f, 1f);
                     if (roll <= itemDrop.itemDropChance)
                     {
-                        int quantity = Random.Range(itemDrop.item.EquipableTag == EquipableTag.None ? itemDrop.minQuantity + enemyTypeData.level : itemDrop.minQuantity,
-                            itemDrop.item.EquipableTag == EquipableTag.None ? itemDrop.maxQuantity + 1 + enemyTypeData.level : itemDrop.maxQuantity + 1);
+                        int quantity = getDropQuality(itemDrop);
                         for (int i = 0; i < quantity; i++)
                         {
                             actionsManager.PickupItem(itemDrop.item);
@@ -179,5 +182,19 @@ public class Enemy : MonoBehaviour
     internal void SetEnemyTypeData(EnemyTypeData clonedEnemyTypeData)
     {
         this.enemyTypeData = clonedEnemyTypeData;
+    }
+
+    private int getDropQuality(ItemDrop itemDrop)
+    {
+        int quality = Random.Range(itemDrop.item.EquipableTag == EquipableTag.None ? itemDrop.minQuantity + enemyTypeData.level : itemDrop.minQuantity,
+                            itemDrop.item.EquipableTag == EquipableTag.None ? itemDrop.maxQuantity + 1 + enemyTypeData.level : itemDrop.maxQuantity + 1);
+        switch (enemyTypeData.enemyTraits)
+        {
+            case EnemyTraits.Elite:
+                return (int)(quality * 1.5f);
+            case EnemyTraits.Boss:
+                return quality * 2;
+        }
+        return quality;
     }
 }

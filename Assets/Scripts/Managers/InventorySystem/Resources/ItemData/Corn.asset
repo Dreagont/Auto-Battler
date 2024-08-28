@@ -16,12 +16,13 @@ MonoBehaviour:
   displayName: Corn
   description: Corn
   icon: {fileID: 113395291, guid: 9470b17ec078762449d7fbcec5647f51, type: 3}
-  MaxStackSize: 3
+  MaxStackSize: 999
+  sellPrice: 50
   itemType1: 2
   itemType2: 3
   consumeStats:
-    GoldGain: 66
-    EnergyGain: 17
+    GoldGain: 0
+    EnergyGain: 50
   EquipableTag: 0
   bonusHealth: 0
   bonusArmor: 0
